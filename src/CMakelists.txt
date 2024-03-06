@@ -1,0 +1,10 @@
+set(MODULE Mihomo)
+
+
+
+set_target_properties(${MODULE}
+PROPERTIES
+  CMAKE_AUTOUIC ON
+  CMAKE_AUTOMOC ON
+  CMAKE_AUTORCC ON
+)
