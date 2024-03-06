@@ -1,10 +1,55 @@
 set(MODULE Mihomo)
 
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
+
+
+file(GLOB_RECURSE MODULE_SOURCES *.h *.hpp *.cpp *.c *.ui *.rc)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MODULE_SOURCES})
+
+add_executable(${MODULE} ${MODULE_SOURCES})
+
+#translations----------
+list(APPEND TS_FILES ${PROJECT_SOURCE_DIR}/assets/translations/${MODULE}_zh_CN.ts)
+
+set_source_files_properties(${TS_FILES}
+PROPERTIES OUTPUT_LOCATION "${PROJECT_SOURCE_DIR}/assets/qm")
+
+qt6_add_lupdate(${MODULE} TS_FILES ${TS_FILES})   
+qt6_add_lrelease(${MODULE} TS_FILES ${TS_FILES} QM_FILES_OUTPUT_VARIABLE qm_files)
+#translations----------
+
+target_link_libraries(${MODULE} 
+PRIVATE Qt${QT_VERSION_MAJOR}::Core  
+PRIVATE Qt${QT_VERSION_MAJOR}::Gui  
+PRIVATE Qt${QT_VERSION_MAJOR}::Widgets 
+PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport 
+PRIVATE Qt${QT_VERSION_MAJOR}::OpenGL
+PRIVATE SingleApplication
+PRIVATE QCoro${QT_VERSION_MAJOR}Network
+)
 
 set_target_properties(${MODULE}
 PROPERTIES
   CMAKE_AUTOUIC ON
   CMAKE_AUTOMOC ON
   CMAKE_AUTORCC ON
+  CMAKE_INCLUDE_CURRENT_DIR ON
+  CMAKE_CXX_STANDARD 20
+  CMAKE_CXX_STANDARD_REQUIRED ON
+)
+
+target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/SingleApplication)
+
+add_custom_command(TARGET ${MODULE} POST_BUILD
+    COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:${MODULE}>
+    COMMENT "Running windeployqt to deploy Qt dependencies"
 )

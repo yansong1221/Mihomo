@@ -1,3 +1,6 @@
 [submodule "3rdparty/SingleApplication"]
 	path = 3rdparty/SingleApplication
 	url = https://github.com/itay-grudev/SingleApplication.git
+[submodule "3rdparty/qcoro"]
+	path = 3rdparty/qcoro
+	url = https://github.com/danvratil/qcoro.git

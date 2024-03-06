@@ -34,12 +34,7 @@ endif(IS_ROOT_PROJECT)
 set(QAPPLICATION_CLASS QApplication)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 
-add_subdirectory(SingleApplication 3rdparty/SingleApplication)
+add_subdirectory(3rdparty/qcoro)
+add_subdirectory(3rdparty/SingleApplication)
 
 add_subdirectory(src)
-
-
-set_target_properties(SingleApplication
-  PROPERTIES
-    FOLDER          lib
-)
