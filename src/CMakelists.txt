@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 
 file(GLOB_RECURSE MODULE_SOURCES *.h *.hpp *.cpp *.c *.ui *.rc)
@@ -38,6 +39,7 @@ PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport
 PRIVATE Qt${QT_VERSION_MAJOR}::OpenGL
 PRIVATE SingleApplication
 PRIVATE QWKWidgets
+PRIVATE yaml-cpp::yaml-cpp
 PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 

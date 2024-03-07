@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 #include "Connections/ConnectionsModel.h"
 #include "Core/APIClient.h"
-#include "WindowBar/windowbar.h"
 #include "WindowBar/windowbutton.h"
 #include "ui_MainWindow.h"
 #include <QTimer>
@@ -55,6 +54,11 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
 {
     ui->setupUi(this);
 
+    ui->closeButton->setHoverColor(QColor(232, 17, 35));
+    ui->maxButton->setWatchWidget(this);
+    ui->alwaysTopButton->setWatchWidget(this);
+    ui->alwaysTopButton->setVisible(false);
+
     auto windowAgent = new QWK::WidgetWindowAgent(this);
     windowAgent->setup(this);
 
@@ -96,6 +100,14 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
             showMaximized();
         }
     });
+    connect(ui->alwaysTopButton, &QAbstractButton::clicked, this, [this]() {
+        if (this->windowFlags().testFlag(Qt::WindowStaysOnTopHint)) {
+            this->setWindowFlag(Qt::WindowStaysOnTopHint, false);
+        } else {
+            this->setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
+            this->show();
+        }
+    });
     connect(ui->closeButton, &QAbstractButton::clicked, this, &QWidget::close);
 #endif
 
@@ -111,18 +123,4 @@ void MainWindow::retranslateUi()
 {
     ui->retranslateUi(this);
 }
-
-void MainWindow::changeEvent(QEvent *event) 
-{
-    if (event->type() == QEvent::WindowStateChange) {
-        // 窗口状态发生了改变
-        if (isMaximized()) {
-            ui->maxButton->setIcon(QIcon(":/dark/images/normaled.png"));
-        } else {
-            ui->maxButton->setIcon(QIcon(":/dark/images/maximize.png"));
-        }
-    }
-    QWidget::changeEvent(event);
-}
-
 } // namespace Mihomo

@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1130</width>
-    <height>801</height>
+    <width>1334</width>
+    <height>881</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -38,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -60,9 +57,19 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="iconButton">
+       <widget class="Mihomo::GUI::WindowButton" name="iconButton">
         <property name="text">
-         <string>PushButton</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../assets/app.qrc">
+          <normaloff>:/global/images/Meta.png</normaloff>:/global/images/Meta.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -80,14 +87,14 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="alwaysTopButton">
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
+       <widget class="Mihomo::GUI::AlwaysTopWindowButton" name="alwaysTopButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="maximumSize">
+        <property name="minimumSize">
          <size>
           <width>32</width>
           <height>32</height>
@@ -99,14 +106,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="minButton">
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
+       <widget class="Mihomo::GUI::WindowButton" name="minButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="maximumSize">
+        <property name="minimumSize">
          <size>
           <width>32</width>
           <height>32</height>
@@ -125,14 +132,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="maxButton">
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
+       <widget class="Mihomo::GUI::MaximizeWindowButton" name="maxButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="maximumSize">
+        <property name="minimumSize">
          <size>
           <width>32</width>
           <height>32</height>
@@ -151,14 +158,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="closeButton">
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
+       <widget class="Mihomo::GUI::WindowButton" name="closeButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="maximumSize">
+        <property name="minimumSize">
          <size>
           <width>32</width>
           <height>32</height>
@@ -214,6 +221,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Mihomo::GUI::WindowButton</class>
+   <extends>QPushButton</extends>
+   <header>WindowBar/WindowButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Mihomo::GUI::MaximizeWindowButton</class>
+   <extends>QPushButton</extends>
+   <header>WindowBar/WindowButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Mihomo::GUI::AlwaysTopWindowButton</class>
+   <extends>QPushButton</extends>
+   <header>WindowBar/WindowButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../assets/app.qrc"/>
  </resources>

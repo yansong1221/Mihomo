@@ -8,6 +8,8 @@ int main(int argc, char *argv[])
 
     Mihomo::Application app(argc, argv);
 
+    QApplication::setWindowIcon(QIcon(":/global/images/Meta.png"));
+
     Mihomo::MainWindow w;
     w.show();
 

@@ -16,7 +16,6 @@ public:
 
 protected:
     void retranslateUi() override;
-    void changeEvent(QEvent *event) override;
 
 private:
     ::Ui::MainWindow *ui;
