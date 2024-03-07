@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/dark">
+        <file>images/close.png</file>
+        <file>images/maximize.png</file>
+        <file>images/minimize.png</file>
+        <file>images/normaled.png</file>
+    </qresource>
+</RCC>

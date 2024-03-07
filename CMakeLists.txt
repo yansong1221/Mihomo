@@ -36,5 +36,6 @@ set(QT_DEFAULT_MAJOR_VERSION 6)
 
 add_subdirectory(3rdparty/qcoro)
 add_subdirectory(3rdparty/SingleApplication)
+add_subdirectory(3rdparty/qwindowkit)
 
 add_subdirectory(src)

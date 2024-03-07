@@ -5,13 +5,13 @@
 
 class QTimer;
 
-namespace Mihomo::Ui::Connections {
+namespace Mihomo::GUI::Connections {
 
 class ConnectionsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    struct Item
+    struct ConnectionItem
     {
         struct MetaData
         {
@@ -54,14 +54,15 @@ private slots:
     QCoro::Task<> __update();
 
 private:
-    void __update(const QList<Item> &newItems);
+    void __update(const QList<ConnectionItem> &newItems);
 
 private:
     QTimer *updateTimer_;
-    QList<Item> items_;
+    QList<ConnectionItem> items_;
 
     quint64 downloadTotal_ = 0;
     quint64 uploadTotal_ = 0;
 };
 
 } // namespace Mihomo::Ui::Connections
+Q_DECLARE_METATYPE(Mihomo::GUI::Connections::ConnectionsModel::ConnectionItem)

@@ -4,3 +4,6 @@
 [submodule "3rdparty/qcoro"]
 	path = 3rdparty/qcoro
 	url = https://github.com/danvratil/qcoro.git
+[submodule "3rdparty/qwindowkit"]
+	path = 3rdparty/qwindowkit
+	url = https://github.com/stdware/qwindowkit.git

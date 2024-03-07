@@ -15,7 +15,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSup
 file(GLOB_RECURSE MODULE_SOURCES *.h *.hpp *.cpp *.c *.ui *.rc)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MODULE_SOURCES})
 
-add_executable(${MODULE} ${MODULE_SOURCES})
+list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/app.qrc)
+
+qt_add_executable(${MODULE} ${MODULE_SOURCES} ${QRC_SOURCE_FILES}) 
+
 
 #translations----------
 list(APPEND TS_FILES ${PROJECT_SOURCE_DIR}/assets/translations/${MODULE}_zh_CN.ts)
@@ -34,6 +37,7 @@ PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport 
 PRIVATE Qt${QT_VERSION_MAJOR}::OpenGL
 PRIVATE SingleApplication
+PRIVATE QWKWidgets
 PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 

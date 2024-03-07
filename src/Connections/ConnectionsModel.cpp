@@ -5,14 +5,14 @@
 #include <QJsonObject>
 #include <QTimer>
 
-namespace Mihomo::Ui::Connections {
+namespace Mihomo::GUI::Connections {
 
-inline static bool operator==(const ConnectionsModel::Item &left,
-                              const ConnectionsModel::Item &right)
+inline static bool operator==(const ConnectionsModel::ConnectionItem &left,
+                              const ConnectionsModel::ConnectionItem &right)
 {
     return left.id == right.id;
 }
-inline static bool operator==(const ConnectionsModel::Item &item, const QString &id)
+inline static bool operator==(const ConnectionsModel::ConnectionItem &item, const QString &id)
 {
     return item.id == id;
 }
@@ -49,11 +49,11 @@ QCoro::Task<> ConnectionsModel::__update()
 
         auto connections = data["connections"].toArray();
 
-        QList<Item> newItems;
+        QList<ConnectionItem> newItems;
         for (const auto &conn : connections) {
             auto obj = conn.toObject();
 
-            Item item;
+            ConnectionItem item;
 
             item.id = obj["id"].toString();
             auto metadata = obj["metadata"].toObject();
@@ -87,7 +87,7 @@ QCoro::Task<> ConnectionsModel::__update()
     updateTimer_->start();
 }
 
-void ConnectionsModel::__update(const QList<Item> &newItems)
+void ConnectionsModel::__update(const QList<ConnectionItem> &newItems)
 {
     //先删除新的中不存在的
     int row = 0;
