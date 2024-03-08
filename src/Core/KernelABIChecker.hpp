@@ -6,7 +6,7 @@
 #include <QString>
 #include <QtGlobal>
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 namespace abi {
 enum QvKernelABIType {
     ABI_WIN32,

@@ -18,7 +18,7 @@
 
 #define QSTRN(num) QString::number(num)
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 
 using ProcessArgument = QPair<QString, QStringList>;
 #ifdef Q_OS_MACOS

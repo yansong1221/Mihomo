@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-namespace Mihomo::GUI::Connections {
+namespace Clash::Meta::GUI::Connections {
 
 inline static bool operator==(const ConnectionsModel::ConnectionItem &left,
                               const ConnectionsModel::ConnectionItem &right)
@@ -20,9 +20,6 @@ inline static bool operator==(const ConnectionsModel::ConnectionItem &item, cons
 ConnectionsModel::ConnectionsModel(QObject *parent /*= nullptr*/)
     : QAbstractListModel(parent)
 {
-    Core::APIClient::instance().init(QString("http://127.0.0.1:1172"),
-                                     "93eb58af-38e1-427e-b6a8-1a8863dd1f25");
-
     updateTimer_ = new QTimer(this);
     connect(updateTimer_, SIGNAL(timeout()), this, SLOT(__update()));
     updateTimer_->setInterval(1000);

@@ -1,7 +1,13 @@
 #include "ClashConfigurator.h"
-
 #include <yaml-cpp/yaml.h>
+#include <QCoreApplication>
 #include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QStandardPaths>
+#include <QTextStream>
+
+namespace Clash::Meta::Config {
 
 inline static YAML::Node convert(const QStringList &datas)
 {
@@ -12,21 +18,21 @@ inline static YAML::Node convert(const QStringList &datas)
     return arrayNode;
 }
 
-inline static YAML::Node convert(const ClashConfigurator::GlobalConfig::Profile &data)
+inline static YAML::Node convert(const ClashConfigurator::Profile &data)
 {
     YAML::Node node;
     node["store-selected"] = data.store_selected;
     node["store-fake-ip"] = data.store_fake_ip;
     return node;
 }
-inline static YAML::Node convert(const ClashConfigurator::GlobalConfig::TLS &data)
+inline static YAML::Node convert(const ClashConfigurator::TLS &data)
 {
     YAML::Node node;
     node["certificate"] = data.certificate.toStdString();
     node["private-key"] = data.private_key.toStdString();
     return node;
 }
-inline static YAML::Node convert(const ClashConfigurator::GlobalConfig::GeoxUrl &data)
+inline static YAML::Node convert(const ClashConfigurator::GeoxUrl &data)
 {
     YAML::Node node;
     node["geoip"] = data.geoip.toStdString();
@@ -34,8 +40,12 @@ inline static YAML::Node convert(const ClashConfigurator::GlobalConfig::GeoxUrl 
     node["mmdb"] = data.mmdb.toStdString();
     return node;
 }
+inline static std::string convert(const ClashConfigurator::Endpoint &data)
+{
+    return QString("%1:%2").arg(data.host).arg(data.port).toStdString();
+}
 
-inline void toYaml(ClashConfigurator::GlobalConfig &config)
+inline static YAML::Node convert(const ClashConfigurator &config)
 {
     YAML::Node data;
     data["allow-lan"] = config.allow_lan;
@@ -69,14 +79,11 @@ inline void toYaml(ClashConfigurator::GlobalConfig &config)
     if (!config.find_process_mode.isEmpty())
         data["find-process-mode"] = config.find_process_mode.toStdString();
 
-    if (!config.external_controller.isEmpty())
-        data["external-controller"] = config.external_controller.toStdString();
-
-    if (!config.external_controller_tls.isEmpty())
-        data["external-controller-tls"] = config.external_controller_tls.toStdString();
-
-    if (!config.secret.isEmpty())
-        data["secret"] = config.secret.toStdString();
+    data["external-controller"] = convert(config.controller.http);
+    if (config.controller.https)
+        data["external-controller-tls"] = convert(config.controller.https.value());
+    if (config.controller.secret)
+        data["secret"] = config.controller.secret.value().toStdString();
 
     if (!config.external_ui.isEmpty())
         data["external-ui"] = config.external_ui.toStdString();
@@ -123,12 +130,65 @@ inline void toYaml(ClashConfigurator::GlobalConfig &config)
     if (!config.global_ua.isEmpty())
         data["global-ua"] = config.global_ua.toStdString();
 
-    qDebug() << QString::fromStdString(YAML::Dump(data));
+    return data;
 }
 
-ClashConfigurator::GlobalConfig::GlobalConfig()
+ClashConfigurator::ClashConfigurator(QObject *parent /*= nullptr*/)
+    : QObject(parent)
+{}
+
+ClashConfigurator &ClashConfigurator::instance()
 {
-    toYaml(*this);
+    static ClashConfigurator s_instance;
+    return s_instance;
 }
 
-static ClashConfigurator::GlobalConfig s;
+QString ClashConfigurator::toYamlString() const
+{
+    auto data = convert(*this);
+    return QString::fromStdString(YAML::Dump(data));
+}
+
+std::optional<QString> ClashConfigurator::toYamlFile(const QString &path) const
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        qDebug() << "Unable to open file: " << path;
+        return tr("Unable to open file: ") + path;
+    }
+    QTextStream stream(&file);
+    stream << toYamlString();
+    return std::nullopt;
+}
+
+std::optional<QString> ClashConfigurator::toYamlFile() const
+{
+    return toYamlFile(ClashConfigurator::fullConfigPath());
+}
+
+QString ClashConfigurator::configLocation()
+{
+    return resourceLocation();
+}
+
+QString ClashConfigurator::resourceLocation()
+{
+    auto dir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/clash.meta/";
+    if (!QDir().exists(dir))
+        QDir().mkpath(dir);
+    return dir;
+}
+
+QString ClashConfigurator::fullConfigPath()
+{
+    QDir dir(configLocation());
+    return dir.filePath("config.yaml");
+}
+
+QString ClashConfigurator::executableFilePath()
+{
+    auto dir = QCoreApplication::applicationDirPath() + "/clash.meta/";
+    return QDir(dir).filePath("mihomo.exe");
+}
+
+} // namespace Clash::Meta::Config

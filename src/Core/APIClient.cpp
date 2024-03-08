@@ -4,10 +4,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
+#include "Configurator/ClashConfigurator.h"
 #include <qcoro/network/qcoronetworkreply.h>
 #include <qcoro/qcorotask.h>
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 APIClient::APIClient(QObject *parent)
     : QObject(parent)
 {
@@ -17,12 +18,6 @@ APIClient &APIClient::instance()
 {
     static APIClient s_instance;
     return s_instance;
-}
-
-void APIClient::init(const QUrl &apiUrl, const QString &authorization)
-{
-    apiUrl_ = apiUrl;
-    authorization_ = authorization;
 }
 
 QCoro::Task<QJsonObject> APIClient::version() const
@@ -35,9 +30,17 @@ QCoro::Task<QJsonObject> APIClient::connections() const
 }
 QCoro::Task<QJsonObject> APIClient::get(const QString &path) const
 {
-    QNetworkRequest request(apiUrl_.url() + path);
-    if (!authorization_.isEmpty())
-        request.setRawHeader("Authorization", QString("Bearer %1").arg(authorization_).toUtf8());
+    const auto &controller = Config::ClashConfigurator::instance().controller;
+
+    QUrl url;
+    url.setHost(controller.http.host);
+    url.setPort(controller.http.port);
+    url.setScheme("http");
+    url.setPath(path);
+
+    QNetworkRequest request(url);
+    if (controller.secret)
+        request.setRawHeader("Authorization", QString("Bearer %1").arg(*controller.secret).toUtf8());
 
     auto reply = manager_->get(request);
     co_await reply;
@@ -51,4 +54,4 @@ QCoro::Task<QJsonObject> APIClient::get(const QString &path) const
     co_return QJsonObject();
 }
 
-} // namespace mihomo::core
+} // namespace Clash::Meta::Core

@@ -4,7 +4,7 @@
 #include <QEvent>
 #include <QObject>
 #include <QWidget>
-namespace Mihomo::Components {
+namespace Clash::Meta::Components {
 
 // 使用 SFINAE (Substitution Failure Is Not An Error) 技术来判断派生关系
 template<typename Base, typename Derived>

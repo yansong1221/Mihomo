@@ -4,7 +4,7 @@
 
 class QProcess;
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 
 class KernelInstance : public QObject
 {
@@ -13,9 +13,11 @@ public:
     explicit KernelInstance(QObject *parent = nullptr);
     ~KernelInstance() override;
 
-    static KernelInstance &getInstance();
+    static KernelInstance &instance();
     //
-    std::optional<QString> StartConnection(const QString &vCorePath, const QString &configPath);
+    std::optional<QString> StartConnection(const QString &vCorePath,
+                                           const QString &configPath,
+                                           const QString &workingDirectory = QString());
     void StopConnection();
     bool KernelStarted = false;
     //
@@ -31,4 +33,4 @@ signals:
 private:
     QProcess *vProcess;
 };
-} // namespace Mihomo::Core
+} // namespace Clash::Meta::Core

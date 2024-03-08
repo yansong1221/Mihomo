@@ -1,6 +1,6 @@
 #pragma once
 #include <QPushButton>
-namespace Mihomo::GUI {
+namespace Clash::Meta::GUI {
 
 class WindowButton : public QPushButton
 {

@@ -8,7 +8,7 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 class APIClient : public QObject
 {
     Q_OBJECT
@@ -16,7 +16,6 @@ public:
     explicit APIClient(QObject *parent = nullptr);
 
 public:
-    void init(const QUrl &apiUrl, const QString &authorization);
 
     QCoro::Task<QJsonObject> version() const;
     QCoro::Task<QJsonObject> connections() const;
@@ -28,7 +27,5 @@ private:
 
 private:
     QNetworkAccessManager *manager_;
-    QUrl apiUrl_;
-    QString authorization_;
 };
 } // namespace Mihomo::Core

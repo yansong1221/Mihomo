@@ -1,5 +1,5 @@
 #include "Application.h"
-namespace Mihomo {
+namespace Clash::Meta {
 Application::Application(int &argc, char *argv[])
     : SingleApplication(argc, argv)
 {}

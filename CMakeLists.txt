@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(Mihomo VERSION 1.0.0.0)
+project(ClashMeta VERSION 1.0.0.0)
 
 get_directory_property(_HAS_PARENT PARENT_DIRECTORY)
 if(_HAS_PARENT)

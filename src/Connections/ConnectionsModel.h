@@ -5,7 +5,7 @@
 
 class QTimer;
 
-namespace Mihomo::GUI::Connections {
+namespace Clash::Meta::GUI::Connections {
 
 class ConnectionsModel : public QAbstractListModel
 {
@@ -65,4 +65,4 @@ private:
 };
 
 } // namespace Mihomo::Ui::Connections
-Q_DECLARE_METATYPE(Mihomo::GUI::Connections::ConnectionsModel::ConnectionItem)
+Q_DECLARE_METATYPE(Clash::Meta::GUI::Connections::ConnectionsModel::ConnectionItem)

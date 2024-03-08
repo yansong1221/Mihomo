@@ -2,7 +2,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
-namespace Mihomo::GUI {
+namespace Clash::Meta::GUI {
 WindowButton::WindowButton(QWidget *parent /*= nullptr*/)
     : QPushButton(parent)
 {}

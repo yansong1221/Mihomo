@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace Mihomo::Core::abi {
+namespace Clash::Meta::Core::abi {
 QvKernelABICompatibility checkCompatibility(QvKernelABIType hostType, QvKernelABIType targetType)
 {
 #ifndef QV2RAY_TRUSTED_ABI

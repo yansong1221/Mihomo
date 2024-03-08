@@ -1,12 +1,13 @@
 #include "MainWindow.h"
 #include "Connections/ConnectionsModel.h"
 #include "Core/APIClient.h"
+#include "TabButtonModel.h"
 #include "WindowBar/windowbutton.h"
 #include "ui_MainWindow.h"
 #include <QTimer>
 #include <QWKWidgets/widgetwindowagent.h>
 
-namespace Mihomo {
+namespace Clash::Meta::GUI {
 
 static inline void emulateLeaveEvent(QWidget *widget)
 {
@@ -54,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
 {
     ui->setupUi(this);
 
+    tabButtonModel_ = new TabButtonModel(this);
+    ui->listView1->setViewport(new QWidget());
+    ui->listView1->setItemDelegate(new TabButtonItemDelegate(this));
+    ui->listView1->setModel(tabButtonModel_);
+    
+
     ui->closeButton->setHoverColor(QColor(232, 17, 35));
     ui->maxButton->setWatchWidget(this);
     ui->alwaysTopButton->setWatchWidget(this);
@@ -99,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
         } else {
             showMaximized();
         }
+        emulateLeaveEvent(ui->maxButton);
     });
     connect(ui->alwaysTopButton, &QAbstractButton::clicked, this, [this]() {
         if (this->windowFlags().testFlag(Qt::WindowStaysOnTopHint)) {
@@ -123,4 +131,4 @@ void MainWindow::retranslateUi()
 {
     ui->retranslateUi(this);
 }
-} // namespace Mihomo
+} // namespace Clash::Meta::GUI

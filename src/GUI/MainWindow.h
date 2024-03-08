@@ -6,7 +6,8 @@ namespace Ui {
 class MainWindow;
 }
 
-namespace Mihomo {
+namespace Clash::Meta::GUI {
+class TabButtonModel;
 class MainWindow : public Components::ObjectEvent<QWidget>
 {
     Q_OBJECT
@@ -19,5 +20,6 @@ protected:
 
 private:
     ::Ui::MainWindow *ui;
+    TabButtonModel *tabButtonModel_;
 };
-} // namespace Mihomo
+} // namespace Clash::Meta::GUI

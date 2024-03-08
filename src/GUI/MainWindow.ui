@@ -57,12 +57,12 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="Mihomo::GUI::WindowButton" name="iconButton">
+       <widget class="Clash::Meta::GUI::WindowButton" name="iconButton">
         <property name="text">
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../assets/app.qrc">
+         <iconset>
           <normaloff>:/global/images/Meta.png</normaloff>:/global/images/Meta.png</iconset>
         </property>
         <property name="iconSize">
@@ -87,7 +87,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="Mihomo::GUI::AlwaysTopWindowButton" name="alwaysTopButton">
+       <widget class="Clash::Meta::GUI::AlwaysTopWindowButton" name="alwaysTopButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -106,7 +106,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Mihomo::GUI::WindowButton" name="minButton">
+       <widget class="Clash::Meta::GUI::WindowButton" name="minButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -123,7 +123,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../assets/app.qrc">
+         <iconset>
           <normaloff>:/dark/images/minimize.png</normaloff>:/dark/images/minimize.png</iconset>
         </property>
         <property name="flat">
@@ -132,7 +132,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Mihomo::GUI::MaximizeWindowButton" name="maxButton">
+       <widget class="Clash::Meta::GUI::MaximizeWindowButton" name="maxButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -149,7 +149,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../assets/app.qrc">
+         <iconset>
           <normaloff>:/dark/images/maximize.png</normaloff>:/dark/images/maximize.png</iconset>
         </property>
         <property name="flat">
@@ -158,7 +158,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Mihomo::GUI::WindowButton" name="closeButton">
+       <widget class="Clash::Meta::GUI::WindowButton" name="closeButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -175,7 +175,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../assets/app.qrc">
+         <iconset>
           <normaloff>:/dark/images/close.png</normaloff>:/dark/images/close.png</iconset>
         </property>
         <property name="flat">
@@ -198,20 +198,43 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>200</width>
+         <width>150</width>
          <height>0</height>
         </size>
        </property>
-       <widget class="QListView" name="listView">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>50</y>
-          <width>171</width>
-          <height>451</height>
-         </rect>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-       </widget>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="Clash::Meta::GUI::TabButtonWidget" name="listView1">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -223,19 +246,24 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Mihomo::GUI::WindowButton</class>
+   <class>Clash::Meta::GUI::WindowButton</class>
    <extends>QPushButton</extends>
    <header>WindowBar/WindowButton.h</header>
   </customwidget>
   <customwidget>
-   <class>Mihomo::GUI::MaximizeWindowButton</class>
+   <class>Clash::Meta::GUI::MaximizeWindowButton</class>
    <extends>QPushButton</extends>
    <header>WindowBar/WindowButton.h</header>
   </customwidget>
   <customwidget>
-   <class>Mihomo::GUI::AlwaysTopWindowButton</class>
+   <class>Clash::Meta::GUI::AlwaysTopWindowButton</class>
    <extends>QPushButton</extends>
    <header>WindowBar/WindowButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Clash::Meta::GUI::TabButtonWidget</class>
+   <extends>QListView</extends>
+   <header>TabButtonWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

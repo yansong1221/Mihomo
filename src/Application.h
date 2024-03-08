@@ -1,7 +1,7 @@
 #pragma once
 #include <SingleApplication>
 
-namespace Mihomo {
+namespace Clash::Meta {
 class Application : public SingleApplication
 {
     Q_OBJECT

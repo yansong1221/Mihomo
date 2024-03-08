@@ -1,4 +1,4 @@
-set(MODULE Mihomo)
+set(MODULE ClashMeta-GUI)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

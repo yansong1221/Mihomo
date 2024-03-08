@@ -2,7 +2,7 @@
 #include <QObject>
 #include <QString>
 //
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 
 class SysProxyConfigurator
 {

@@ -61,7 +61,7 @@ static bool StringToFile(const QString &text, const QString &targetpath)
     return override;
 }
 
-namespace Mihomo::Core {
+namespace Clash::Meta::Core {
 std::pair<bool, std::optional<QString>> KernelInstance::CheckAndSetCoreExecutableState(
     const QString &vCorePath)
 {
@@ -245,13 +245,14 @@ KernelInstance::KernelInstance(QObject *parent)
     KernelStarted = false;
 }
 
-KernelInstance &KernelInstance::getInstance()
+KernelInstance &KernelInstance::instance()
 {
-    static KernelInstance instance;
-    return instance;
+    static KernelInstance s_instance;
+    return s_instance;
 }
 std::optional<QString> KernelInstance::StartConnection(const QString &vCorePath,
-                                                       const QString &configPath)
+                                                       const QString &configPath,
+                                                       const QString &workingDirectory)
 {
     if (KernelStarted) {
         qInfo() << "Status is invalid, expect STOPPED when calling StartConnection";
@@ -260,6 +261,13 @@ std::optional<QString> KernelInstance::StartConnection(const QString &vCorePath,
 
     if (ValidateConfig(vCorePath, configPath)) {
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+        if (workingDirectory.isEmpty()) {
+            QFileInfo fileInfo(vCorePath);
+            QString fileDirectory = fileInfo.absolutePath();
+            vProcess->setWorkingDirectory(fileDirectory);
+        } else
+            vProcess->setWorkingDirectory(workingDirectory);
 
         vProcess->setProcessEnvironment(env);
         vProcess->start(vCorePath, {"-f", configPath}, QIODevice::ReadWrite | QIODevice::Text);
@@ -293,4 +301,4 @@ KernelInstance::~KernelInstance()
     delete vProcess;
 }
 
-} // namespace Mihomo::Core
+} // namespace Clash::Meta::Core
