@@ -27,7 +27,7 @@ Clash--Meta--GUI--WindowBar>QAbstractButton#closeButton:pressed {
 }
 
 
-/*QToolBar { background-color: transparent; border: none; }*/
+QToolBar { background-color: transparent; border: none; }
 QToolButton { background-color: transparent; border: none;}
 QToolButton:hover { background-color: rgba(255, 255, 255, 15%); }
 QToolButton:checked { background-color: rgba(255, 255, 255, 15%); }

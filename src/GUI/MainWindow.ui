@@ -230,7 +230,7 @@
   <customwidget>
    <class>Clash::Meta::GUI::WindowBar</class>
    <extends>QFrame</extends>
-   <header>WindowBar/WindowBar.h</header>
+   <header>GUI/WindowBar/WindowBar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

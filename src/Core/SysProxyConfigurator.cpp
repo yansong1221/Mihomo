@@ -14,11 +14,22 @@
 #include <qlogging.h>
 
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
-
 #define QSTRN(num) QString::number(num)
 
 namespace Clash::Meta::Core {
+
+static QStringList SplitLines(const QString &_string)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return _string.split(QRegularExpression("[\r\n]"), Qt::SkipEmptyParts);
+#elif QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    return _string.split(QRegExp("[\r\n]"), Qt::SkipEmptyParts);
+#else
+    return _string.split(QRegExp("[\r\n]"), QString::SkipEmptyParts);
+#endif
+}
 
 using ProcessArgument = QPair<QString, QStringList>;
 #ifdef Q_OS_MACOS
@@ -30,21 +41,21 @@ QStringList macOSgetNetworkServices()
     p.start();
     p.waitForStarted();
     p.waitForFinished();
-        qDebug() << p.errorString())
-        auto str = p.readAllStandardOutput();
-        auto lines = SplitLines(str);
-        QStringList result;
+    qDebug() << p.errorString();
+    auto str = p.readAllStandardOutput();
+    auto lines = SplitLines(str);
+    QStringList result;
 
-        // Start from 1 since first line is unneeded.
-        for (auto i = 1; i < lines.count(); i++) {
-            // * means disabled.
-            if (!lines[i].contains("*")) {
-                result << lines[i];
-            }
+    // Start from 1 since first line is unneeded.
+    for (auto i = 1; i < lines.count(); i++) {
+        // * means disabled.
+        if (!lines[i].contains("*")) {
+            result << lines[i];
         }
+    }
 
-        qDebug() << "Found " + QSTRN(result.size()) + " network services: " + result.join(";"))
-        return result;
+    qDebug() << "Found " + QSTRN(result.size()) + " network services: " + result.join(";");
+    return result;
 }
 #endif
 #ifdef Q_OS_WIN
@@ -366,25 +377,23 @@ void SysProxyConfigurator::SetSystemProxy(const QString &address, int httpPort, 
 #else
 
     for (const auto &service : macOSgetNetworkServices()) {
-            qDebug() << "Setting proxy for interface: " + service)
+        qDebug() << "Setting proxy for interface: " + service;
 
-            if (hasHTTP)
-            {
-                QProcess::execute("/usr/sbin/networksetup", {"-setwebproxystate", service, "on"});
-                QProcess::execute("/usr/sbin/networksetup",
-                                  {"-setsecurewebproxystate", service, "on"});
-                QProcess::execute("/usr/sbin/networksetup",
-                                  {"-setwebproxy", service, address, QSTRN(httpPort)});
-                QProcess::execute("/usr/sbin/networksetup",
-                                  {"-setsecurewebproxy", service, address, QSTRN(httpPort)});
-            }
+        if (hasHTTP) {
+            QProcess::execute("/usr/sbin/networksetup", {"-setwebproxystate", service, "on"});
+            QProcess::execute("/usr/sbin/networksetup", {"-setsecurewebproxystate", service, "on"});
+            QProcess::execute("/usr/sbin/networksetup",
+                              {"-setwebproxy", service, address, QSTRN(httpPort)});
+            QProcess::execute("/usr/sbin/networksetup",
+                              {"-setsecurewebproxy", service, address, QSTRN(httpPort)});
+        }
 
-            if (hasSOCKS) {
-                QProcess::execute("/usr/sbin/networksetup",
-                                  {"-setsocksfirewallproxystate", service, "on"});
-                QProcess::execute("/usr/sbin/networksetup",
-                                  {"-setsocksfirewallproxy", service, address, QSTRN(socksPort)});
-            }
+        if (hasSOCKS) {
+            QProcess::execute("/usr/sbin/networksetup",
+                              {"-setsocksfirewallproxystate", service, "on"});
+            QProcess::execute("/usr/sbin/networksetup",
+                              {"-setsocksfirewallproxy", service, address, QSTRN(socksPort)});
+        }
     }
 
 #endif
@@ -479,12 +488,11 @@ void SysProxyConfigurator::ClearSystemProxy()
 
 #else
     for (const auto &service : macOSgetNetworkServices()) {
-            qDebug() << "Clearing proxy for interface: " + service)
-            QProcess::execute("/usr/sbin/networksetup", { "-setautoproxystate", service, "off" });
-            QProcess::execute("/usr/sbin/networksetup", {"-setwebproxystate", service, "off"});
-            QProcess::execute("/usr/sbin/networksetup", {"-setsecurewebproxystate", service, "off"});
-            QProcess::execute("/usr/sbin/networksetup",
-                              {"-setsocksfirewallproxystate", service, "off"});
+        qDebug() << "Clearing proxy for interface: " + service;
+        QProcess::execute("/usr/sbin/networksetup", {"-setautoproxystate", service, "off"});
+        QProcess::execute("/usr/sbin/networksetup", {"-setwebproxystate", service, "off"});
+        QProcess::execute("/usr/sbin/networksetup", {"-setsecurewebproxystate", service, "off"});
+        QProcess::execute("/usr/sbin/networksetup", {"-setsocksfirewallproxystate", service, "off"});
     }
 
 #endif
@@ -492,4 +500,4 @@ void SysProxyConfigurator::ClearSystemProxy()
     // Trigger plugin events
     //PluginHost->Send_SystemProxyEvent(Events::SystemProxy::EventObject{ {}, Events::SystemProxy::SystemProxyStateType::ClearProxy });
 }
-} // namespace Mihomo::Core
+} // namespace Clash::Meta::Core

@@ -80,13 +80,17 @@ void WindowBar::setup(QWidget *widget)
     windowAgent->setSystemButton(QWK::WindowAgentBase::Maximize, ui->maxButton);
     windowAgent->setSystemButton(QWK::WindowAgentBase::Close, ui->closeButton);
 #endif
-    windowAgent->setHitTestVisible(ui->toolBar);
+    windowAgent->setHitTestVisible(ui->staysOnTopButton);
 
 #ifdef Q_OS_MAC
     windowAgent->setSystemButtonAreaCallback([](const QSize &size) {
         static constexpr const int width = 75;
         return QRect(QPoint(size.width() - width, 0), QSize(width, size.height())); //
     });
+    ui->minButton->setVisible(false);
+    ui->maxButton->setVisible(false);
+    ui->closeButton->setVisible(false);
+    ui->horizontalLayout->addWidget(ui->iconButton);
 #endif
     connect(ui->minButton, &QAbstractButton::clicked, hostWidget_, &QWidget::showMinimized);
     connect(ui->closeButton, &QAbstractButton::clicked, hostWidget_, &QWidget::close);
@@ -111,7 +115,7 @@ void WindowBar::setup(QWidget *widget)
         });
     });
 
-    connect(ui->staysOnTopButton, &QAction::triggered, this, [this](bool checked) {
+    connect(ui->staysOnTopButton, &QAbstractButton::clicked, this, [this](bool checked) {
         if (!checked) {
             hostWidget_->windowHandle()->setFlags(hostWidget_->windowFlags()
                                                   & ~Qt::WindowStaysOnTopHint);
