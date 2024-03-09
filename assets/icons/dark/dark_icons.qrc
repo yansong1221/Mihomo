@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/icons/dark">
+        <file>index.theme</file>
+        <file>windowbar/windowbar-close-button.png</file>
+        <file>windowbar/windowbar-max-button.png</file>
+        <file>windowbar/windowbar-min-button.png</file>
+        <file>windowbar/windowbar-normal-button.png</file>
+        <file>windowbar/stays-on-top.svg</file>
+        <file>windowbar/stays-on-top-checked.svg</file>
+        <file>menu-group/menu-group-log.svg</file>
+        <file>misc/kernel-running.svg</file>
+        <file>misc/kernel-stopped.svg</file>
+        <file>menu-group/menu-group-general.svg</file>
+        <file>menu-group/menu-group-proxies.svg</file>
+    </qresource>
+</RCC>

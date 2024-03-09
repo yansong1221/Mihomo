@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>dark/windowbar-close-button.png</file>
+        <file>dark/windowbar-max-button.png</file>
+        <file>dark/windowbar-min-button.png</file>
+        <file>dark/windowbar-normal-button.png</file>
+        <file>dark/stays-on-top.svg</file>
+        <file>dark/stays-on-top-cheched.svg</file>
+    </qresource>
+</RCC>

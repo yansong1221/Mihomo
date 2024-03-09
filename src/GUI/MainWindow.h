@@ -7,7 +7,7 @@ class MainWindow;
 }
 
 namespace Clash::Meta::GUI {
-class TabButtonModel;
+
 class MainWindow : public Components::ObjectEvent<QWidget>
 {
     Q_OBJECT
@@ -18,8 +18,14 @@ public:
 protected:
     void retranslateUi() override;
 
+public slots:
+    void tryStartKernel();
+    void restartKernel();
+
+private:
+    void updateStatus();
+
 private:
     ::Ui::MainWindow *ui;
-    TabButtonModel *tabButtonModel_;
 };
 } // namespace Clash::Meta::GUI

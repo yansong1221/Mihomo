@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <QElapsedTimer>
 #include <QObject>
 
 class QProcess;
@@ -20,6 +21,8 @@ public:
                                            const QString &workingDirectory = QString());
     void StopConnection();
     bool KernelStarted = false;
+
+    inline const QElapsedTimer &ElapsedTimer() const { return vElapsedTimer; };
     //
     static bool ValidateConfig(const QString &vCorePath, const QString &path);
     static bool ValidateKernel(const QString &vCorePath, QString *message);
@@ -32,5 +35,6 @@ signals:
 
 private:
     QProcess *vProcess;
+    QElapsedTimer vElapsedTimer;
 };
 } // namespace Clash::Meta::Core

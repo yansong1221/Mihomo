@@ -1,0 +1,48 @@
+
+*:focus {
+    outline: none;
+}
+
+Clash--Meta--GUI--WindowBar {
+    background-color: #3C3C3C;
+}
+
+
+
+Clash--Meta--GUI--WindowButton {
+    qproperty-iconSize: 12px 12px;
+    min-width: 50px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+}
+
+Clash--Meta--GUI--WindowButton:hover {
+    background-color: rgba(255, 255, 255, 15%);
+}
+
+Clash--Meta--GUI--WindowBar>QAbstractButton#closeButton:hover,
+Clash--Meta--GUI--WindowBar>QAbstractButton#closeButton:pressed {
+    background-color: #e81123;
+}
+
+
+/*QToolBar { background-color: transparent; border: none; }*/
+QToolButton { background-color: transparent; border: none;}
+QToolButton:hover { background-color: rgba(255, 255, 255, 15%); }
+QToolButton:checked { background-color: rgba(255, 255, 255, 15%); }
+
+QListView{
+    border: none;
+    background-color: transparent;
+    qproperty-iconSize: 32px 32px;
+}
+QListView::item{
+    height: 40px;
+}
+
+QListView::item:focus {
+    outline: none;
+}
+QListView::item:selected,
+QListView::item:hover { background-color: rgba(255, 255, 255, 15%); }

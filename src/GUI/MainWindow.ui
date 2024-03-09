@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="windowBar">
+    <widget class="Clash::Meta::GUI::WindowBar" name="windowBar">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -56,133 +56,6 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="Clash::Meta::GUI::WindowButton" name="iconButton">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/global/images/Meta.png</normaloff>:/global/images/Meta.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>922</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="Clash::Meta::GUI::AlwaysTopWindowButton" name="alwaysTopButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Clash::Meta::GUI::WindowButton" name="minButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/dark/images/minimize.png</normaloff>:/dark/images/minimize.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Clash::Meta::GUI::MaximizeWindowButton" name="maxButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/dark/images/maximize.png</normaloff>:/dark/images/maximize.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Clash::Meta::GUI::WindowButton" name="closeButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/dark/images/close.png</normaloff>:/dark/images/close.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -208,30 +81,139 @@
          <height>16777215</height>
         </size>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="Clash::Meta::GUI::TabButtonWidget" name="listView1">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+         <widget class="QWidget" name="gridWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectItems</enum>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="listWidget">
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
           </property>
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>General</string>
+           </property>
+           <property name="icon">
+            <iconset theme="menu-group-general"/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Proxies</string>
+           </property>
+           <property name="icon">
+            <iconset theme="menu-group-proxies"/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Logs</string>
+           </property>
+           <property name="icon">
+            <iconset theme="menu-group-log"/>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLabel" name="kernelRunTime">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="kernelStatus">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>运行中</string>
+             </property>
+             <property name="icon">
+              <iconset theme="kernel-running"/>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -246,24 +228,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Clash::Meta::GUI::WindowButton</class>
-   <extends>QPushButton</extends>
-   <header>WindowBar/WindowButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Clash::Meta::GUI::MaximizeWindowButton</class>
-   <extends>QPushButton</extends>
-   <header>WindowBar/WindowButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Clash::Meta::GUI::AlwaysTopWindowButton</class>
-   <extends>QPushButton</extends>
-   <header>WindowBar/WindowButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Clash::Meta::GUI::TabButtonWidget</class>
-   <extends>QListView</extends>
-   <header>TabButtonWidget.h</header>
+   <class>Clash::Meta::GUI::WindowBar</class>
+   <extends>QFrame</extends>
+   <header>WindowBar/WindowBar.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

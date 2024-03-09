@@ -274,6 +274,7 @@ std::optional<QString> KernelInstance::StartConnection(const QString &vCorePath,
         vProcess->waitForStarted();
         qDebug() << "core started.";
         KernelStarted = true;
+        vElapsedTimer.start();
         return std::nullopt;
     } else {
         KernelStarted = false;

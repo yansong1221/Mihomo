@@ -17,6 +17,8 @@ file(GLOB_RECURSE MODULE_SOURCES *.h *.hpp *.cpp *.c *.ui *.rc)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MODULE_SOURCES})
 
 list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/app.qrc)
+#list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/icons.qrc)
+list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/dark/dark_icons.qrc)
 
 qt_add_executable(${MODULE} ${MODULE_SOURCES} ${QRC_SOURCE_FILES}) 
 

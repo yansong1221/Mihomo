@@ -1,11 +1,6 @@
 <RCC>
-  <qresource prefix="/dark">
-    <file>images/close.png</file>
-    <file>images/maximize.png</file>
-    <file>images/minimize.png</file>
-    <file>images/normaled.png</file>
-  </qresource>
-  <qresource prefix="/global">
-    <file>images/Meta.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>qss/dark.qss</file>
+        <file>images/Meta.png</file>
+    </qresource>
 </RCC>
