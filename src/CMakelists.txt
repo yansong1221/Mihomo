@@ -39,9 +39,11 @@ PRIVATE Qt${QT_VERSION_MAJOR}::Gui
 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets 
 PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport 
 PRIVATE Qt${QT_VERSION_MAJOR}::OpenGL
-PRIVATE SingleApplication
+PRIVATE SingleApplication::SingleApplication
 PRIVATE QWKWidgets
 PRIVATE yaml-cpp::yaml-cpp
+PRIVATE qt-material-widgets
+PRIVATE QtMWidgets
 PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 
@@ -56,6 +58,7 @@ PROPERTIES
 )
 
 target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/SingleApplication)
+target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/qtmwidgets/include)
 
 add_custom_command(TARGET ${MODULE} POST_BUILD
     COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:${MODULE}>

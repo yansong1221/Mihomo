@@ -35,14 +35,21 @@ QToolButton:checked { background-color: rgba(255, 255, 255, 15%); }
 QListView{
     border: none;
     background-color: transparent;
-    qproperty-iconSize: 32px 32px;
+    qproperty-iconSize: 22px 22px;
+    show-decoration-selected: 1;
 }
 QListView::item{
-    height: 40px;
+    background-color: transparent;
+    border-left: 3px solid transparent;
+    height: 60px; 
+    padding-left: 10px;
 }
 
-QListView::item:focus {
-    outline: none;
+QListView::item:hover { 
+    background-color: rgba(255, 255, 255, 15%); 
 }
-QListView::item:selected,
-QListView::item:hover { background-color: rgba(255, 255, 255, 15%); }
+
+QListView::item:selected{
+    border-left: 3px solid rgba(76,194,255,50%);
+    background-color: rgba(255, 255, 255, 15%);
+}

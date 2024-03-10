@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QString>
 #include <QStringDecoder>
+#include "lib/qtmaterialstyle.h"
 
 
 
@@ -51,8 +52,9 @@ int main(int argc, char *argv[])
 
     Application app(argc, argv);
 
-    QApplication::setStyle("Adwaita-dark");
-    //QApplication::setStyle("fusion");
+    QtMaterialStyle::instance();
+    //QApplication::setStyle("Adwaita-dark");
+    QApplication::setStyle(&QtMaterialStyle::instance());
     QApplication::setWindowIcon(QIcon(":/images/Meta.png"));
 
  
