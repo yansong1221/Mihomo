@@ -15,8 +15,8 @@ namespace Clash::Meta::GUI {
 class TableViewCellHelper
 {
 public:
-    TableViewCellHelper(QtMWidgets::TableViewCell *cell)
-        : layout_(new QHBoxLayout(cell->accessoryWidget()))
+    TableViewCellHelper(QWidget *cell)
+        : layout_(new QHBoxLayout(cell))
         , cell_(cell)
     {
         layout_->setContentsMargins(0, 0, 0, 0);
@@ -41,9 +41,9 @@ public:
 
     QAbstractButton *addButton(const QString &text = QString())
     {
-        auto btn = new QtMaterialFlatButton(cell_);
+        auto btn = new QPushButton(cell_);
         btn->setText(text);
-        btn->setType(Material::ButtonRaised);
+        //btn->setType(Material::ButtonRaised);
         layout_->addWidget(btn);
         return btn;
     }
@@ -78,7 +78,7 @@ public:
 
 private:
     QHBoxLayout *layout_;
-    QtMWidgets::TableViewCell *cell_;
+    QWidget *cell_;
 };
 
 GeneralWidget::GeneralWidget(QWidget *parent /*= nullptr*/)
@@ -86,11 +86,11 @@ GeneralWidget::GeneralWidget(QWidget *parent /*= nullptr*/)
     , ui(new Ui::GeneralWidget)
 {
     ui->setupUi(this);
-    auto section = new QtMWidgets::TableViewSection(this);
-    section->setHighlightCellOnClick(true);
+    //auto section = new QtMWidgets::TableViewSection(this);
+    //section->setHighlightCellOnClick(true);
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
 
@@ -103,33 +103,39 @@ GeneralWidget::GeneralWidget(QWidget *parent /*= nullptr*/)
 
         auto btn = helper.addButton("7890");
 
-        section->addCell(cell);
+        auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
         helper.addLabel(TR_CREATOR("Allow Lan"));
         helper.addSpacerItem();
         helper.addSwitchButton();
 
-        section->addCell(cell);
+       auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
         helper.addLabel(TR_CREATOR("IPv6"));
         helper.addSpacerItem();
         helper.addSwitchButton();
 
-        section->addCell(cell);
+        auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
         helper.addLabel(TR_CREATOR("TUN Mode"));
@@ -141,35 +147,36 @@ GeneralWidget::GeneralWidget(QWidget *parent /*= nullptr*/)
         helper.addSpacerItem();
         helper.addSwitchButton();
 
-        section->addCell(cell);
+        auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
         helper.addLabel(TR_CREATOR("System Proxy"));
         helper.addSpacerItem();
         helper.addSwitchButton();
 
-        section->addCell(cell);
+        auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
 
     {
-        auto cell = new QtMWidgets::TableViewCell(this);
+        auto cell = new QWidget(this);
 
         TableViewCellHelper helper(cell);
         helper.addLabel(TR_CREATOR("Start with System"));
         helper.addSpacerItem();
         helper.addSwitchButton();
 
-        section->addCell(cell);
+        auto item = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(item);
+        ui->listWidget->setItemWidget(item, cell);
     }
-    ui->view->addSection(section);
-    ui->view->setHighlightCellOnClick(true);
-    ui->view->setIndicatorColor(Qt::red);
-    ui->view->setBlurColor(Qt::red);
-    ui->view->viewport()->setAttribute(Qt::WA_TranslucentBackground);
 }
 
 GeneralWidget::~GeneralWidget()
