@@ -53,8 +53,9 @@ int main(int argc, char *argv[])
     Application app(argc, argv);
 
     QtMaterialStyle::instance();
-    //QApplication::setStyle("Adwaita-dark");
-    QApplication::setStyle(&QtMaterialStyle::instance());
+    app.setFont(QtMaterialStyle::instance().themeFont(Material::FontBody2));
+    //QApplication::setStyle("fusion");
+    QApplication::setStyle("Adwaita-dark");
     QApplication::setWindowIcon(QIcon(":/images/Meta.png"));
 
  
@@ -63,6 +64,6 @@ int main(int argc, char *argv[])
 
     GUI::MainWindow w;
     w.show();
-    w.tryStartKernel();
+ 
     return app.exec();
 }

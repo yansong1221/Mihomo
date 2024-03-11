@@ -44,20 +44,7 @@ MainWindow::MainWindow(QWidget *parent /*= nullptr*/)
     auto generalWidget = new GeneralWidget(this);
     ui->stackedWidget->addWidget(generalWidget);
 
-    auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::updateStatus);
-    timer->setInterval(std::chrono::seconds(1));
-    timer->start();
-
-    connect(&Core::KernelInstance::instance(),
-            &Core::KernelInstance::OnProcessErrored,
-            this,
-            [this](const QString &errMessage) {
-                updateStatus();
-                QTimer::singleShot(1000, this, &MainWindow::tryStartKernel);
-            });
-
-    updateStatus();
+    ui->controlBar->tryStartKernel();
 }
 
 MainWindow::~MainWindow()
@@ -68,39 +55,6 @@ MainWindow::~MainWindow()
 void MainWindow::retranslateUi()
 {
     ui->retranslateUi(this);
-}
-
-void MainWindow::updateStatus()
-{
-    if (!Core::KernelInstance::instance().KernelStarted) {
-        ui->kernelRunTime->clear();
-        ui->kernelStatus->setIcon(QIcon::fromTheme("kernel-stopped"));
-        ui->kernelStatus->setText(tr("Stopped"));
-        return;
-    }
-    auto duration = Core::KernelInstance::instance().ElapsedTimer().durationElapsed();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-
-    auto time = QTime::fromMSecsSinceStartOfDay(ms);
-    ui->kernelRunTime->setText(time.toString("hh:mm:ss"));
-    ui->kernelStatus->setIcon(QIcon::fromTheme("kernel-running"));
-    ui->kernelStatus->setText(tr("Running"));
-}
-
-void MainWindow::tryStartKernel()
-{
-    if (Core::KernelInstance::instance().KernelStarted)
-        return;
-
-    restartKernel();
-}
-
-void MainWindow::restartKernel()
-{
-    Core::KernelInstance::instance().StopConnection();
-    Config::ClashConfigurator::instance().toYamlFile();
-    Core::KernelInstance::instance().StartConnection(Config::ClashConfigurator::executableFilePath(),
-                                                     Config::ClashConfigurator::fullConfigPath());
 }
 
 } // namespace Clash::Meta::GUI

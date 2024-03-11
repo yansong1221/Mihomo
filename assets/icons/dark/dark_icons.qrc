@@ -10,7 +10,11 @@
         <file>menu-group/menu-group-log.svg</file>
         <file>misc/kernel-running.svg</file>
         <file>misc/kernel-stopped.svg</file>
+        <file>misc/cmd.svg</file>
         <file>menu-group/menu-group-general.svg</file>
         <file>menu-group/menu-group-proxies.svg</file>
+        <file>misc/port-random.svg</file>
+        <file>misc/port-random-disabled.svg</file>
+        <file>misc/tips-info.svg</file>
     </qresource>
 </RCC>

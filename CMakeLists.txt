@@ -34,6 +34,12 @@ endif(IS_ROOT_PROJECT)
 set(QAPPLICATION_CLASS QApplication)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 
+set(QCORO_BUILD_EXAMPLES OFF)
+set(BUILD_TESTING OFF)
+set(QTMWIDGETS_BUILD_TESTS OFF)
+set(QWINDOWKIT_INSTALL OFF)
+
+
 add_subdirectory(3rdparty/qtmwidgets)
 add_subdirectory(3rdparty/qcoro)
 add_subdirectory(3rdparty/SingleApplication)

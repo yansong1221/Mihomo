@@ -18,13 +18,6 @@ public:
 protected:
     void retranslateUi() override;
 
-public slots:
-    void tryStartKernel();
-    void restartKernel();
-
-private:
-    void updateStatus();
-
 private:
     ::Ui::MainWindow *ui;
 };

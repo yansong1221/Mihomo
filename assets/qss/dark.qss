@@ -4,9 +4,8 @@
 }
 
 Clash--Meta--GUI--WindowBar {
-    background-color: #3C3C3C;
+    background-color:rgb(52,52,66);
 }
-
 
 
 Clash--Meta--GUI--WindowButton {
@@ -23,6 +22,19 @@ Clash--Meta--GUI--WindowButton:hover {
 
 Clash--Meta--GUI--WindowBar>QAbstractButton#closeButton:hover,
 Clash--Meta--GUI--WindowBar>QAbstractButton#closeButton:pressed {
+    background-color: #e81123;
+}
+
+Clash--Meta--GUI--ControlBar {
+    background-color:rgb(66,66,78);
+}
+
+Clash--Meta--GUI--MainWindow {
+    background-color:rgb(44,42,56);
+}
+
+QtMWidgets--TableViewSection,
+QtMWidgets--TableView{
     background-color: #e81123;
 }
 
