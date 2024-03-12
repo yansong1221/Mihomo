@@ -8,17 +8,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport OpenGL LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets Quick Qml LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Quick Qml LinguistTools)
 find_package(yaml-cpp CONFIG REQUIRED)
-
 
 file(GLOB_RECURSE MODULE_SOURCES *.h *.hpp *.cpp *.c *.ui *.rc)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MODULE_SOURCES})
 
 list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/app.qrc)
-#list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/icons.qrc)
-list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/dark/dark_icons.qrc)
+list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/qml/qml.qrc)
+list(APPEND QRC_SOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/icons.qrc)
 
 qt_add_executable(${MODULE} ${MODULE_SOURCES} ${QRC_SOURCE_FILES}) 
 
@@ -36,14 +35,13 @@ qt6_add_lrelease(${MODULE} TS_FILES ${TS_FILES} QM_FILES_OUTPUT_VARIABLE qm_file
 target_link_libraries(${MODULE} 
 PRIVATE Qt${QT_VERSION_MAJOR}::Core  
 PRIVATE Qt${QT_VERSION_MAJOR}::Gui  
-PRIVATE Qt${QT_VERSION_MAJOR}::Widgets 
-PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport 
-PRIVATE Qt${QT_VERSION_MAJOR}::OpenGL
+PRIVATE Qt${QT_VERSION_MAJOR}::Quick
+PRIVATE Qt${QT_VERSION_MAJOR}::Qml
+PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 PRIVATE SingleApplication::SingleApplication
-PRIVATE QWKWidgets
+PRIVATE QWKQuick
 PRIVATE yaml-cpp::yaml-cpp
-PRIVATE qt-material-widgets
-PRIVATE QtMWidgets
+PRIVATE qskinny qskqmlexport
 PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 
@@ -58,9 +56,8 @@ PROPERTIES
 )
 
 target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/SingleApplication)
-target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/qtmwidgets/include)
 
-add_custom_command(TARGET ${MODULE} POST_BUILD
-    COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:${MODULE}>
-    COMMENT "Running windeployqt to deploy Qt dependencies"
-)
+# add_custom_command(TARGET ${MODULE} POST_BUILD
+#     COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:${MODULE}>
+#     COMMENT "Running windeployqt to deploy Qt dependencies"
+# )

@@ -7,9 +7,9 @@
 [submodule "3rdparty/qwindowkit"]
 	path = 3rdparty/qwindowkit
 	url = https://github.com/stdware/qwindowkit.git
-[submodule "3rdparty/qtmwidgets"]
-	path = 3rdparty/qtmwidgets
-	url = https://github.com/igormironchik/qtmwidgets.git
 [submodule "3rdparty/qt-material-widgets"]
 	path = 3rdparty/qt-material-widgets
 	url = https://github.com/yansong1221/qt-material-widgets.git
+[submodule "3rdparty/qskinny"]
+	path = 3rdparty/qskinny
+	url = https://github.com/uwerat/qskinny.git

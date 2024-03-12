@@ -1,14 +1,17 @@
 #include "Application.h"
 #include "Configurator/ClashConfigurator.h"
 #include "Core/KernelInteractions.hpp"
-#include "GUI/MainWindow.h"
 
 #include <QFile>
 #include <QString>
 #include <QStringDecoder>
-#include "lib/qtmaterialstyle.h"
 
+#include <QtGui/QGuiApplication>
+#include <QtQml/QQmlApplicationEngine>
+#include <QtQuick/QQuickWindow>
 
+#include <QWKQuick/qwkquickglobal.h>
+#include <QskQml.h>
 
 QString StringFromFile(QFile &source)
 {
@@ -52,18 +55,13 @@ int main(int argc, char *argv[])
 
     Application app(argc, argv);
 
-    QtMaterialStyle::instance();
-    app.setFont(QtMaterialStyle::instance().themeFont(Material::FontBody2));
-    //QApplication::setStyle("fusion");
-    QApplication::setStyle("Adwaita-dark");
-    QApplication::setWindowIcon(QIcon(":/images/Meta.png"));
+    QGuiApplication::setWindowIcon(QIcon(":/images/Meta.png"));
 
- 
-    QIcon::setThemeName("dark"); 
-    app.setStyleSheet(StringFromFile(":/qss/dark.qss"));
+    QskQml::registerTypes();
 
-    GUI::MainWindow w;
-    w.show();
- 
+    QQuickWindow::setDefaultAlphaBuffer(true);
+    QQmlApplicationEngine engine;
+    QWK::registerTypes(&engine);
+    engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
     return app.exec();
 }

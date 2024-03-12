@@ -31,20 +31,21 @@ if(IS_ROOT_PROJECT)
 endif(IS_ROOT_PROJECT)
 
 
-set(QAPPLICATION_CLASS QApplication)
+set(QAPPLICATION_CLASS QGuiApplication)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 
 set(QCORO_BUILD_EXAMPLES OFF)
 set(BUILD_TESTING OFF)
-set(QTMWIDGETS_BUILD_TESTS OFF)
+
 set(QWINDOWKIT_INSTALL OFF)
+set(QWINDOWKIT_BUILD_QUICK ON)
+set(QWINDOWKIT_BUILD_WIDGETS OFF)
 
 
-add_subdirectory(3rdparty/qtmwidgets)
 add_subdirectory(3rdparty/qcoro)
 add_subdirectory(3rdparty/SingleApplication)
 add_subdirectory(3rdparty/qwindowkit)
-add_subdirectory(3rdparty/qt-material-widgets)
+add_subdirectory(3rdparty/qskinny)
 
 
 add_subdirectory(src)
