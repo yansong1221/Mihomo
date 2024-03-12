@@ -12,6 +12,7 @@ Button {
     topInset: 0
     rightInset: 0
     bottomInset: 0
+    hoverEnabled: true
     property alias source: image.source
 
     contentItem: Item {
@@ -23,6 +24,7 @@ Button {
             height: 12
         }
     }
+
     background: Rectangle {
         color: {
             if (!root.enabled) {

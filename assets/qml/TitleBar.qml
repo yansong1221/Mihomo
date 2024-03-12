@@ -1,22 +1,31 @@
 import QtQuick
 import QtQuick.Window
 import QWindowKit 1.0
+import QtQuick.Controls 6.2
 
 Rectangle {
-    id: titleBar
+    id: root
     property var window: null
     color: window && window.active ? "#3C3C3C" : "#505050"
 
     function setup(w) {
-        titleBar.window = w;
+        window = w;
         windowAgent.setup(w);
-        windowAgent.setTitleBar(titleBar);
+        windowAgent.setTitleBar(root);
+        windowAgent.setHitTestVisible(stayTopButton);
+        windowAgent.setHitTestVisible(test);
         w.visible = true;
     }
     WindowAgent {
         id: windowAgent
     }
-
+    Button {
+        id: test
+        text: "hello"
+        background: Rectangle {
+            color: Qt.rgba(0, 0, 0, 0.15)
+        }
+    }
     Image {
         id: iconButton
         anchors {
@@ -50,6 +59,29 @@ Rectangle {
         }
         height: parent.height
 
+        QWKButton {
+            id: stayTopButton
+            checkable: true
+            height: parent.height
+            source: {
+                if (stayTopButton.checked) {
+                    return "qrc:///icons/dark/windowbar/stays-on-top-checked.svg";
+                } else {
+                    return "qrc:///icons/dark/windowbar/stays-on-top.svg";
+                }
+            }
+            onCheckedChanged: {
+                if (!window)
+                    return;
+                if (checked) {
+                    window.flags |= Qt.WindowStaysOnTopHint;
+                    root.flags |= Qt.WindowStaysOnTopHint;
+                } else {
+                    window.flags &= ~Qt.WindowStaysOnTopHint;
+                    root.flags &= ~Qt.WindowStaysOnTopHint;
+                }
+            }
+        }
         QWKButton {
             id: minButton
             height: parent.height

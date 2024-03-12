@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1
 import QtQml
 import QWindowKit 1.0
+import "./ControlBar"
 
 Window {
     id: window
@@ -27,11 +28,15 @@ Window {
 
         height: 32
     }
-    Timer {
-        interval: 100
-        running: true
-        repeat: true
-        onTriggered: timeLabel.text = Qt.formatTime(new Date(), "hh:mm:ss")
+    ControlBar {
+        id: controlBar
+        anchors {
+            top: titleBar.bottom
+            topMargin: 1
+            left: parent.left
+            bottom: parent.bottom
+        }
+        width: 150
     }
 
     QtObject {
@@ -41,15 +46,5 @@ Window {
     QtObject {
         id: darkStyle
         readonly property color windowBackgroundColor: "#1E1E1E"
-    }
-
-    Label {
-        id: timeLabel
-        anchors.centerIn: parent
-        font {
-            pointSize: 75
-            bold: true
-        }
-        color: "#FEFEFE"
     }
 }
