@@ -7,42 +7,56 @@ Rectangle {
     id: root
     property var window: null
     color: window && window.active ? "#3C3C3C" : "#505050"
-
+    property bool isOSX : Qt.platform.os === "osx"
+    
     function setup(w) {
         window = w;
         windowAgent.setup(w);
         windowAgent.setTitleBar(root);
         windowAgent.setHitTestVisible(stayTopButton);
-        windowAgent.setHitTestVisible(test);
+        windowAgent.setSystemButtonArea(macSystemButton)
         w.visible = true;
+        w.stayTop = true
+    
     }
+    
+    Component.onCompleted: {
+        console.log("Current platform: " + Qt.platform.os);
+    }
+    
     WindowAgent {
         id: windowAgent
     }
-    Button {
-        id: test
-        text: "hello"
-        background: Rectangle {
-            color: Qt.rgba(0, 0, 0, 0.15)
+
+    Row{
+        anchors {
+            top: parent.top
+            left: parent.left
         }
-    }
-    Image {
+        height: parent.height
+
+        Item {
+        id: macSystemButton
+        visible: isOSX
+        height: parent.height
+        width: 80
+        //color: "red"
+
+        }
+        Image {
         id: iconButton
         anchors {
             verticalCenter: parent.verticalCenter
-            left: parent.left
             leftMargin: 10
         }
         width: 18
         height: 18
         mipmap: true
-        source: "qrc:///images/Meta.png"
-    }
-
-    Text {
+        source: "qrc:/assets/meta.png"
+        }
+        Text {
         anchors {
             verticalCenter: parent.verticalCenter
-            left: iconButton.right
             leftMargin: 10
         }
         horizontalAlignment: Text.AlignHCenter
@@ -51,6 +65,10 @@ Rectangle {
         color: "#ECECEC"
         text: window ? window.title : ""
     }
+    }
+    
+
+    
 
     Row {
         anchors {
@@ -81,12 +99,14 @@ Rectangle {
             height: parent.height
             source: "qrc:/assets/icons/dark/windowbar-mix.svg"
             onClicked: window.showMinimized()
+            visible: !isOSX
             Component.onCompleted: windowAgent.setSystemButton(WindowAgent.Minimize, minButton)
         }
 
         QWKButton {
             id: maxButton
             height: parent.height
+            visible: !isOSX
             source: {
                 if (window.visibility === Window.Maximized)
                     return "qrc:/assets/icons/dark/windowbar-restore.svg";
@@ -107,6 +127,7 @@ Rectangle {
         QWKButton {
             id: closeButton
             height: parent.height
+            visible: !isOSX
             source: "qrc:/assets/icons/dark/windowbar-close.svg"
             background: Rectangle {
                 color: {
