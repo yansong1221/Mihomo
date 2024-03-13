@@ -40,12 +40,18 @@ set(BUILD_TESTING OFF)
 set(QWINDOWKIT_INSTALL OFF)
 set(QWINDOWKIT_BUILD_QUICK ON)
 set(QWINDOWKIT_BUILD_WIDGETS OFF)
+set(QWINDOWKIT_BUILD_WIDGETS OFF)
+
+set(FLUENTUI_BUILD_STATIC_LIB ON)
+set(FLUENTUI_BUILD_EXAMPLES OFF)
+
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
 
 add_subdirectory(3rdparty/qcoro)
 add_subdirectory(3rdparty/SingleApplication)
 add_subdirectory(3rdparty/qwindowkit)
-add_subdirectory(3rdparty/qskinny)
+add_subdirectory(3rdparty/FluentUI)
 
-
-add_subdirectory(src)
+include(app)

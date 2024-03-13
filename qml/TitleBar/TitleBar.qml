@@ -65,9 +65,9 @@ Rectangle {
             height: parent.height
             source: {
                 if (stayTopButton.checked) {
-                    return "qrc:///icons/dark/windowbar/stays-on-top-checked.svg";
+                    return "qrc:/assets/icons/dark/stays-on-top-checked.svg";
                 } else {
-                    return "qrc:///icons/dark/windowbar/stays-on-top.svg";
+                    return "qrc:/assets/icons/dark/stays-on-top.svg";
                 }
             }
             onCheckedChanged: {
@@ -79,7 +79,7 @@ Rectangle {
         QWKButton {
             id: minButton
             height: parent.height
-            source: "qrc:///icons/dark/windowbar/min-button.svg"
+            source: "qrc:/assets/icons/dark/windowbar-mix.svg"
             onClicked: window.showMinimized()
             Component.onCompleted: windowAgent.setSystemButton(WindowAgent.Minimize, minButton)
         }
@@ -89,9 +89,9 @@ Rectangle {
             height: parent.height
             source: {
                 if (window.visibility === Window.Maximized)
-                    return "qrc:///icons/dark/windowbar/normal-button.svg";
+                    return "qrc:/assets/icons/dark/windowbar-restore.svg";
                 else {
-                    return "qrc:///icons/dark/windowbar/max-button.svg";
+                    return "qrc:/assets/icons/dark/windowbar-max.svg";
                 }
             }
             onClicked: {
@@ -107,7 +107,7 @@ Rectangle {
         QWKButton {
             id: closeButton
             height: parent.height
-            source: "qrc:///icons/dark/windowbar/close-button.svg"
+            source: "qrc:/assets/icons/dark/windowbar-close.svg"
             background: Rectangle {
                 color: {
                     if (!closeButton.enabled) {

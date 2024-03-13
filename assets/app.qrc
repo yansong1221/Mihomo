@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qss/dark.qss</file>
-        <file>images/Meta.png</file>
-    </qresource>
-</RCC>

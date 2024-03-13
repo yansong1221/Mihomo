@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/qml">
-        <file>main.qml</file>
-        <file>QWKButton.qml</file>
-        <file>TitleBar.qml</file>
-    </qresource>
-</RCC>

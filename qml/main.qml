@@ -5,6 +5,7 @@ import Qt.labs.platform 1.1
 import QtQml
 import QWindowKit 1.0
 import "./ControlBar"
+import "./TitleBar"
 
 import Clash.Meta.GUI 1.0
 
