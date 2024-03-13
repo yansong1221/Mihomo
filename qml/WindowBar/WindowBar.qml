@@ -2,81 +2,103 @@ import QtQuick
 import QtQuick.Window
 import QWindowKit 1.0
 import QtQuick.Controls 6.2
+import FluentUI
 
 Rectangle {
     id: root
-    property var window: null
-    color: window && window.active ? "#3C3C3C" : "#505050"
+    visible : false
+    property var window
+    color:"transparent"
+    //color: window && window.active ? "#3C3C3C" : "#505050"
+    readonly property bool isOSX: Qt.platform.os === "osx"
 
-    function setup(w) {
-        window = w;
-        windowAgent.setup(w);
+    Component.onCompleted: {
+        console.log("Current platform: " + Qt.platform.os);
+
+        windowAgent.setup(root.window);
         windowAgent.setTitleBar(root);
         windowAgent.setHitTestVisible(stayTopButton);
-        windowAgent.setHitTestVisible(test);
-        w.visible = true;
+        if (root.isOSX)
+            windowAgent.setSystemButtonArea(macSystemButton);
+        root.window.visible = true;
+        //root.window.stayTop = true;
+        root.visible = true
     }
+
     WindowAgent {
         id: windowAgent
     }
-    Button {
-        id: test
-        text: "hello"
-        background: Rectangle {
-            color: Qt.rgba(0, 0, 0, 0.15)
+
+    Item {
+        id: macSystemButton
+        height: parent.height
+        width: 80
+        anchors {
+            top: parent.top
+            left: parent.left
         }
+        visible: root.isOSX
     }
+
     Image {
         id: iconButton
         anchors {
+            left: root.isOSX ? undefined : parent.left
+            right: root.isOSX ? parent.right : undefined
             verticalCenter: parent.verticalCenter
-            left: parent.left
-            leftMargin: 10
+            leftMargin: root.isOSX ? undefined : 10
+            rightMargin: root.isOSX ? 10 : undefined
         }
         width: 18
         height: 18
         mipmap: true
-        source: "qrc:///images/Meta.png"
+        source: "qrc:/assets/meta.png"
     }
 
-    Text {
+    FluText {
+        id: windowTitle
         anchors {
-            verticalCenter: parent.verticalCenter
-            left: iconButton.right
+            centerIn : parent
+            //verticalCenter: parent.verticalCenter
             leftMargin: 10
         }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 14
-        color: "#ECECEC"
         text: window ? window.title : ""
     }
 
+    WindowButton {
+        id: stayTopButton
+        checkable: true
+        height: parent.height
+        anchors {
+            top: parent.top
+            right: root.isOSX ? iconButton.left : defaultBar.left
+        }
+        source: {
+            if (stayTopButton.checked) {
+                return "qrc:/assets/icons/dark/stays-on-top-checked.svg";
+            } else {
+                return "qrc:/assets/icons/dark/stays-on-top.svg";
+            }
+        }
+        onCheckedChanged: {
+            if (!window)
+                return;
+            FluTheme.darkMode = checked
+            window.stayTop = checked;
+        }
+    }
+
     Row {
+        id: defaultBar
+        visible: !root.isOSX
         anchors {
             top: parent.top
             right: parent.right
         }
         height: parent.height
-
-        QWKButton {
-            id: stayTopButton
-            checkable: true
-            height: parent.height
-            source: {
-                if (stayTopButton.checked) {
-                    return "qrc:/assets/icons/dark/stays-on-top-checked.svg";
-                } else {
-                    return "qrc:/assets/icons/dark/stays-on-top.svg";
-                }
-            }
-            onCheckedChanged: {
-                if (!window)
-                    return;
-                window.stayTop = checked;
-            }
-        }
-        QWKButton {
+        WindowButton {
             id: minButton
             height: parent.height
             source: "qrc:/assets/icons/dark/windowbar-mix.svg"
@@ -84,7 +106,7 @@ Rectangle {
             Component.onCompleted: windowAgent.setSystemButton(WindowAgent.Minimize, minButton)
         }
 
-        QWKButton {
+        WindowButton {
             id: maxButton
             height: parent.height
             source: {
@@ -104,7 +126,7 @@ Rectangle {
             Component.onCompleted: windowAgent.setSystemButton(WindowAgent.Maximize, maxButton)
         }
 
-        QWKButton {
+        WindowButton {
             id: closeButton
             height: parent.height
             source: "qrc:/assets/icons/dark/windowbar-close.svg"

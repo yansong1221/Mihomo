@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     FluentUI::getInstance()->registerTypes(&engine);
 #endif
 
-    QUrl url(QStringLiteral("qrc:///Clash/Meta/GUI/qml/main.qml"));
+    QUrl url(QStringLiteral("qrc:/Clash/Meta/GUI/qml/main.qml"));
 
     QObject::connect(
         &engine,

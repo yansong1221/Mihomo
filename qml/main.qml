@@ -2,33 +2,33 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1
+import QtQuick.Layouts
 import QtQml
-import QWindowKit 1.0
 import "./ControlBar"
-import "./TitleBar"
-
+import "./WindowBar"
 import Clash.Meta.GUI 1.0
+import FluentUI 1.0
 
 ClashWindow {
     id: window
     stayTop: false
     width: 800
     height: 600
-    color: darkStyle.windowBackgroundColor
+    color: window.active ? FluTheme.windowActiveBackgroundColor : FluTheme.windowBackgroundColor
     title: qsTr("Hello, world!")
     Component.onCompleted: {
-        titleBar.setup(window);
+        FluTheme.darkMode = false;
+        FluTheme.darkMode = true;
     }
 
-    TitleBar {
+    WindowBar {
         id: titleBar
+        window: window
         anchors {
             top: parent.top
-            topMargin: 1
             left: parent.left
             right: parent.right
         }
-
         height: 32
     }
     ControlBar {
@@ -39,15 +39,6 @@ ClashWindow {
             left: parent.left
             bottom: parent.bottom
         }
-        width: 150
-    }
-
-    QtObject {
-        id: lightStyle
-    }
-
-    QtObject {
-        id: darkStyle
-        readonly property color windowBackgroundColor: "#1E1E1E"
+        width: parent.width
     }
 }
