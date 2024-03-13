@@ -8,16 +8,17 @@
 
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
-#include <QtQuick/QQuickWindow>
 #include <QtQml/qqmlextensionplugin.h>
+#include <QtQuick/QQuickWindow>
 
 #include <QWKQuick/qwkquickglobal.h>
 
+#ifdef FLUENTUI_BUILD_STATIC_LIB
 #if (QT_VERSION > QT_VERSION_CHECK(6, 2, 0))
 Q_IMPORT_QML_PLUGIN(FluentUIPlugin)
 #endif
 #include <FluentUI.h>
-
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -50,8 +51,23 @@ int main(int argc, char *argv[])
 
     QWK::registerTypes(&engine);
     Application::registerTypes(&engine);
-    FluentUI::getInstance()->registerTypes(&engine);
 
-    engine.load(QUrl(QStringLiteral("qrc:///Clash/Meta/GUI/qml/main.qml")));
+#ifdef FLUENTUI_BUILD_STATIC_LIB
+    FluentUI::getInstance()->registerTypes(&engine);
+#endif
+
+    QUrl url(QStringLiteral("qrc:///Clash/Meta/GUI/qml/main.qml"));
+
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreated,
+        &app,
+        [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        },
+        Qt::QueuedConnection);
+
+    engine.load(url);
     return app.exec();
 }
