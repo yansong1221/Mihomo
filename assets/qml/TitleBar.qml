@@ -73,13 +73,7 @@ Rectangle {
             onCheckedChanged: {
                 if (!window)
                     return;
-                if (checked) {
-                    window.flags |= Qt.WindowStaysOnTopHint;
-                    root.flags |= Qt.WindowStaysOnTopHint;
-                } else {
-                    window.flags &= ~Qt.WindowStaysOnTopHint;
-                    root.flags &= ~Qt.WindowStaysOnTopHint;
-                }
+                window.stayTop = checked;
             }
         }
         QWKButton {

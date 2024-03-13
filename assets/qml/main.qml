@@ -6,9 +6,11 @@ import QtQml
 import QWindowKit 1.0
 import "./ControlBar"
 
-Window {
-    id: window
+import Clash.Meta.GUI 1.0
 
+ClashWindow {
+    id: window
+    stayTop: false
     width: 800
     height: 600
     color: darkStyle.windowBackgroundColor

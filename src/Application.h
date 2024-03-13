@@ -1,6 +1,8 @@
 #pragma once
 #include <SingleApplication>
 
+class QQmlEngine;
+
 namespace Clash::Meta {
 class Application : public SingleApplication
 {
@@ -8,5 +10,8 @@ class Application : public SingleApplication
 public:
     explicit Application(int &argc, char *argv[]);
     ~Application();
+
+public:
+    static void registerTypes(QQmlEngine *engine);
 };
 } // namespace mihomo

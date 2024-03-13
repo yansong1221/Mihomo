@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
     QQuickWindow::setDefaultAlphaBuffer(true);
     QQmlApplicationEngine engine;
     QWK::registerTypes(&engine);
+    Application::registerTypes(&engine);
+
     //engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
     engine.load(QUrl::fromLocalFile("D:\\Mihomo\\assets\\qml\\main.qml"));
     return app.exec();
