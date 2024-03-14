@@ -103,12 +103,14 @@ Rectangle {
             height: parent.height
             source: "qrc:/assets/icons/dark/windowbar-mix.svg"
             onClicked: window.showMinimized()
+            visible: !isOSX
             Component.onCompleted: windowAgent.setSystemButton(WindowAgent.Minimize, minButton)
         }
 
         WindowButton {
             id: maxButton
             height: parent.height
+            visible: !isOSX
             source: {
                 if (window.visibility === Window.Maximized)
                     return "qrc:/assets/icons/dark/windowbar-restore.svg";
@@ -129,6 +131,7 @@ Rectangle {
         WindowButton {
             id: closeButton
             height: parent.height
+            visible: !isOSX
             source: "qrc:/assets/icons/dark/windowbar-close.svg"
             background: Rectangle {
                 color: {
