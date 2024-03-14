@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import FluentUI
+import "./Home"
 
 FluScrollablePage {
     id: root
@@ -13,37 +14,35 @@ FluScrollablePage {
             width: 60
         }
     }
+    Component {
+        id: bindAddressDialog
+        BindAddressDialog {
+        }
+    }
+
     ColumnLayout {
         spacing: 5
         Layout.topMargin: 20
         Layout.fillWidth: true
 
-        FluArea {
-            Layout.fillWidth: true
-            height: 50
-            RowLayout{
-                Layout.fillWidth: true
-                anchors{
-                    fill:parent
-                    leftMargin:40
-                    rightMargin: 40
-                }        
+        HomeItemArea {
+            leftItems: FluObject {
+                Image {
+                    source: FluTheme.dark ? "qrc:/assets/icons/dark/network-port.svg" : "qrc:/assets/icons/light/network-port.svg"
+                    Layout.maximumWidth: 16
+                    Layout.maximumHeight: 16
+                    mipmap: true
+                    fillMode: Image.PreserveAspectFit
+                }
                 FluText {
+                    Layout.fillWidth: true
                     text: qsTr("Port")
                     font: FluTextStyle.BodyStrong
-                    anchors {
-                        left: parent.left
-                        verticalCenter: parent.verticalCenter
-                    }
                 }
-
+            }
+            rightItems: FluObject {
                 FluLoader {
-                    Layout.alignment: Qt.AlignRight
                     sourceComponent: switchButton
-                    anchors {
-                        right: parent.right
-                        verticalCenter: parent.verticalCenter
-                    }
                     onLoaded: {
                         item.onCheckedChanged.connect(function () {
                             console.log("Signal emitted from loaded component");
@@ -52,90 +51,30 @@ FluScrollablePage {
                 }
             }
         }
-        FluArea {
+        HomeItemArea {
             Layout.fillWidth: true
             height: 50
 
-            FluContentDialog {
-                id: dialog
-                title: qsTr("更改绑定地址")
-                negativeText: qsTr("取消")
-                positiveText: qsTr("确定")
-                contentDelegate: Component {
-                    Item {
-                        implicitWidth: parent.width
-                        implicitHeight: 80
-                        ColumnLayout {
-                            //anchors.centerIn: parent
-                            //Layout.topMargin:40
-                            anchors.fill: parent
-                            FluText {
-                                color: "#198DAB"
-                                Layout.fillWidth: true
-                                Layout.leftMargin: 40
-                                Layout.rightMargin: 40
-                                text: qsTr("允许LAN只会绑定到您设置的地址，*表示所有接口")
-                            }
-                            FluText {
-                                text: qsTr("新绑定地址")
-                                Layout.fillWidth: true
-                                Layout.leftMargin: 40
-                                Layout.rightMargin: 40
-                                Layout.topMargin: 5
-                            }
-                            FluTextBox {
-                                Layout.fillWidth: true
-                                Layout.leftMargin: 40
-                                Layout.rightMargin: 40
-                                Layout.topMargin: 5
-                            }
-                        }
-                    }
-                }
-                onNegativeClicked: {
-                    console.log(qsTr("Click the Cancel Button"));
-                }
-                onPositiveClicked: {
-                    console.log(qsTr("Click the OK Button"));
-                }
-            }
-
-            Item {
-                anchors {
-                    fill: parent
-                    leftMargin: 40
-                    rightMargin: 40
-                }
+            leftItems: FluObject {
 
                 FluText {
                     text: qsTr("Allow LAN")
                     font: FluTextStyle.BodyStrong
-                    anchors {
-                        left: parent.left
-                        verticalCenter: parent.verticalCenter
-                    }
                 }
+            }
 
+            rightItems: FluObject {
                 FluTextButton {
                     text: "绑定地址:*"
-                    anchors {
-                        right: allowLanSwitch.left
-                        verticalCenter: parent.verticalCenter
-                    }
-
                     onClicked: {
+                        var dialog = bindAddressDialog.createObject(parent);
                         dialog.open();
                     }
                 }
 
                 FluLoader {
                     id: allowLanSwitch
-                    Layout.alignment: Qt.AlignRight
                     sourceComponent: switchButton
-                    anchors {
-                        right: parent.right
-                        verticalCenter: parent.verticalCenter
-                    }
                     onLoaded: {
                         item.onCheckedChanged.connect(function () {
                             console.log("Signal emitted from loaded component");

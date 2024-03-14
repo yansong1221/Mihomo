@@ -1,11 +1,9 @@
-file(GLOB QML_FILES ${PROJECT_SOURCE_DIR}/qml/*/*.qml)
-
-file(GLOB PROJECT_JS_FILES ${PROJECT_SOURCE_DIR}/qml/*/*.js)
+file(GLOB_RECURSE QML_FILES ${PROJECT_SOURCE_DIR}/qml/*.qml)
+file(GLOB_RECURSE JS_FILES ${PROJECT_SOURCE_DIR}/qml/*.js)
 
 list(APPEND QML_FILES
-    ${PROJECT_SOURCE_DIR}/qml/main.qml
-    ${PROJECT_JS_FILES}
-    )
+    ${JS_FILES}
+)
 
 source_group(TREE ${PROJECT_SOURCE_DIR} FILES ${QML_FILES})
 
@@ -14,14 +12,13 @@ foreach(qml ${QML_FILES})
     set_source_files_properties(${qml} PROPERTIES QT_RESOURCE_ALIAS ${qml_alias})
 endforeach(qml)
 
-#----------------------------
-
-file(GLOB RESOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/icons/*/*.svg)
+# ----------------------------
+file(GLOB_RECURSE RESOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/*.svg)
 list(APPEND RESOURCE_FILES ${PROJECT_SOURCE_DIR}/assets/meta.png)
 
 source_group(TREE ${PROJECT_SOURCE_DIR} FILES ${RESOURCE_FILES})
 
-#---------------------------
+# ---------------------------
 set(CXX_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE CXX_SOURCE_FILES ${CXX_SOURCE_DIR}/*.cpp ${CXX_SOURCE_DIR}/*.c)
