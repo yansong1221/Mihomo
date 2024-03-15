@@ -1,4 +1,4 @@
-#include "ClashConfigurator.h"
+﻿#include "ClashConfigurator.h"
 #include <yaml-cpp/yaml.h>
 #include <QCoreApplication>
 #include <QDebug>
@@ -43,6 +43,10 @@ inline static YAML::Node convert(const ClashConfigurator::GeoxUrl &data)
 inline static std::string convert(const ClashConfigurator::Endpoint &data)
 {
     return QString("%1:%2").arg(data.host).arg(data.port).toStdString();
+}
+
+inline static YAML::Node proxyProviders() {
+    return YAML::Node();
 }
 
 inline static YAML::Node convert(const ClashConfigurator &config)
@@ -130,6 +134,7 @@ inline static YAML::Node convert(const ClashConfigurator &config)
     if (!config.global_ua.isEmpty())
         data["global-ua"] = config.global_ua.toStdString();
 
+    data["proxy-providers"] = proxyProviders();
     return data;
 }
 

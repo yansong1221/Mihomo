@@ -245,11 +245,6 @@ KernelInstance::KernelInstance(QObject *parent)
     KernelStarted = false;
 }
 
-KernelInstance &KernelInstance::instance()
-{
-    static KernelInstance s_instance;
-    return s_instance;
-}
 std::optional<QString> KernelInstance::StartConnection(const QString &vCorePath,
                                                        const QString &configPath,
                                                        const QString &workingDirectory)

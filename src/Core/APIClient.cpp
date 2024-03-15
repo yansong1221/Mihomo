@@ -4,6 +4,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
+#include "Components/HttpClient.h"
 #include "Configurator/ClashConfigurator.h"
 #include <qcoro/network/qcoronetworkreply.h>
 #include <qcoro/qcorotask.h>
@@ -11,9 +12,7 @@
 namespace Clash::Meta::Core {
 APIClient::APIClient(QObject *parent)
     : QObject(parent)
-{
-    manager_ = new QNetworkAccessManager(this);
-}
+{}
 APIClient &APIClient::instance()
 {
     static APIClient s_instance;
@@ -38,20 +37,22 @@ QCoro::Task<QJsonObject> APIClient::get(const QString &path) const
     url.setScheme("http");
     url.setPath(path);
 
-    QNetworkRequest request(url);
+    Components::HttpClient::Headers header;
     if (controller.secret)
-        request.setRawHeader("Authorization", QString("Bearer %1").arg(*controller.secret).toUtf8());
+        header["Authorization"] = QString("Bearer %1").arg(*controller.secret);
 
-    auto reply = manager_->get(request);
-    co_await reply;
-
-    reply->deleteLater();
+    auto reply = co_await Components::HttpClient::instance().awaitGet(url, header);
 
     if (reply->error() == QNetworkReply::NoError) {
         auto doc = QJsonDocument::fromJson(reply->readAll()).object();
         co_return doc;
     }
     co_return QJsonObject();
+}
+
+QCoro::Task<QJsonObject> APIClient::proxies() const 
+{
+    return this->get("/proxies");
 }
 
 } // namespace Clash::Meta::Core

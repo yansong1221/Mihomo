@@ -19,6 +19,8 @@ ClashWindow {
     Component.onCompleted: {
         FluTheme.darkMode = false;
         FluTheme.darkMode = true;
+
+        //ClashMetaProcess.restart()
     }
 
     WindowBar {

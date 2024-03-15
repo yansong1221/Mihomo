@@ -14,7 +14,6 @@ public:
     explicit KernelInstance(QObject *parent = nullptr);
     ~KernelInstance() override;
 
-    static KernelInstance &instance();
     //
     std::optional<QString> StartConnection(const QString &vCorePath,
                                            const QString &configPath,
@@ -29,6 +28,7 @@ public:
     static std::pair<bool, std::optional<QString>> CheckAndSetCoreExecutableState(
         const QString &vCorePath);
 
+    QProcess *process() const { return vProcess; };
 signals:
     void OnProcessErrored(const QString &errMessage);
     void OnProcessOutputReadyRead(const QString &output);

@@ -19,6 +19,7 @@ public:
 
     QCoro::Task<QJsonObject> version() const;
     QCoro::Task<QJsonObject> connections() const;
+    QCoro::Task<QJsonObject> proxies() const;
 
     static APIClient &instance();
 
@@ -26,6 +27,5 @@ private:
     QCoro::Task<QJsonObject> get(const QString &path) const;
 
 private:
-    QNetworkAccessManager *manager_;
 };
 } // namespace Mihomo::Core

@@ -22,5 +22,13 @@ FluNavigationView {
                 navigationView.push(url)
             }
         }
+        FluPaneItem {
+            title: qsTr("Proxies")
+            icon: FluentIcons.Home
+            url:"/Clash/Meta/GUI/qml/Page/T_Proxies.qml"
+            onTap: {
+                navigationView.push(url)
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 #include "Application.h"
-#include <QtQml/QQmlEngine>
+#include "ClashMetaProcess.h"
 #include "Window.h"
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlEngine>
 
 namespace Clash::Meta {
 Application::Application(int &argc, char *argv[])
@@ -9,7 +11,7 @@ Application::Application(int &argc, char *argv[])
 
 Application::~Application() {}
 
-void Application::registerTypes(QQmlEngine *engine) 
+void Application::registerTypes(QQmlEngine *engine)
 {
     static constexpr const char kModuleUri[] = "Clash.Meta.GUI";
     Q_UNUSED(engine);
@@ -23,6 +25,8 @@ void Application::registerTypes(QQmlEngine *engine)
     // @uri QWindowKit
     qmlRegisterType<GUI::Window>(kModuleUri, 1, 0, "ClashWindow");
     qmlRegisterModule(kModuleUri, 1, 0);
+
+    engine->rootContext()->setContextProperty("ClashMetaProcess", &ClashMetaProcess::instance());
 }
 
-} // namespace mihomo
+} // namespace Clash::Meta

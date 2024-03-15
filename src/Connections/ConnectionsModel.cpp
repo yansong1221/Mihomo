@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-namespace Clash::Meta::GUI::Connections {
+namespace Clash::Meta::Connections {
 
 inline static bool operator==(const ConnectionsModel::ConnectionItem &left,
                               const ConnectionsModel::ConnectionItem &right)
