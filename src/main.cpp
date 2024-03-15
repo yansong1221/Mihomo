@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     qputenv("QSG_RENDER_LOOP", "basic");
 #endif
 
-    QCoreApplication::setOrganizationName("MetaCubeX");
+    QCoreApplication::setOrganizationName("MetaCubeX1");
     QCoreApplication::setApplicationName("ClashMeta-GUI");
 
     Application app(argc, argv);

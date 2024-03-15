@@ -1,5 +1,5 @@
 #include "ConnectionsModel.h"
-#include "core/APIClient.h"
+#include "Core/APIClient.h"
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonObject>

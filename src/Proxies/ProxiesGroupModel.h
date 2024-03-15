@@ -18,6 +18,9 @@ public slots:
     QCoro::Task<> reload();
 
 private:
+    void parse(const QJsonObject& obj);
+
+private:
     bool isLoadding_ = false;
 };
 } // namespace Clash::Meta::Connections

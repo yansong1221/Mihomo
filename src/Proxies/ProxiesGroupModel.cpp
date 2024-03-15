@@ -23,8 +23,11 @@ QCoro::Task<> ProxiesGroupModel::reload()
         QTimer::singleShot(1000, this, &ProxiesGroupModel::reload);
         co_return;
     }
-
+    parse(obj);
 
 }
+void ProxiesGroupModel::parse(const QJsonObject& obj)
+{
 
+}
 } // namespace Clash::Meta::Connections
