@@ -17,8 +17,7 @@ ClashWindow {
     color: window.active ? FluTheme.windowActiveBackgroundColor : FluTheme.windowBackgroundColor
     title: qsTr("Hello, world!")
     Component.onCompleted: {
-        FluTheme.darkMode = false;
-        FluTheme.darkMode = true;
+        //FluTheme.dark = true;
         window.visible = true
         ClashMetaProcess.restart()
     }
