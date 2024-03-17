@@ -43,7 +43,7 @@ PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 
 qt_add_qml_module(${MODULE}
-    URI "Clash.Meta.GUI"
+    URI "Clash.Meta"
     VERSION 1.0
     RESOURCE_PREFIX "/"
     QML_FILES

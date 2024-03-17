@@ -10,24 +10,41 @@
 #include <qcoro/qcorotask.h>
 
 namespace Clash::Meta::Core {
-APIClient::APIClient(QObject *parent)
-    : QObject(parent)
-{}
-APIClient &APIClient::instance()
-{
-    static APIClient s_instance;
-    return s_instance;
-}
 
 QCoro::Task<QJsonObject> APIClient::version() const
 {
-    return this->get("/version");
+    return this->getOKJson("/version");
 }
 QCoro::Task<QJsonObject> APIClient::connections() const
 {
-    return this->get("/connections");
+    return this->getOKJson("/connections");
 }
-QCoro::Task<QJsonObject> APIClient::get(const QString &path) const
+QCoro::Task<QJsonObject> APIClient::getOKJson(const QString &path) const
+{
+    auto reply = co_await get(path);
+    if (reply->error() == QNetworkReply::NoError) {
+        auto doc = QJsonDocument::fromJson(reply->readAll()).object();
+        co_return doc;
+    }
+    co_return QJsonObject();
+}
+
+QCoro::Task<QJsonObject> APIClient::proxies() const
+{
+    return this->getOKJson("/proxies");
+}
+
+QCoro::Task<QNetworkReply *> APIClient::delay(const QString &proxy,
+                                              const QString &testUrl,
+                                              int timeout) const
+{
+    QUrlQuery query;
+    query.addQueryItem("timeout", QString::number(timeout));
+    query.addQueryItem("url", testUrl);
+    return get(QString("/proxies/%1/delay").arg(QUrl::toPercentEncoding(proxy)), query);
+}
+
+QCoro::Task<QNetworkReply *> APIClient::get(const QString &path, const QUrlQuery &query) const
 {
     const auto &controller = Config::ClashConfigurator::instance().controller;
 
@@ -36,23 +53,13 @@ QCoro::Task<QJsonObject> APIClient::get(const QString &path) const
     url.setPort(controller.http.port);
     url.setScheme("http");
     url.setPath(path);
+    url.setQuery(query);
 
     Components::HttpClient::Headers header;
     if (controller.secret)
         header["Authorization"] = QString("Bearer %1").arg(*controller.secret);
 
-    auto reply = co_await Components::HttpClient::instance().awaitGet(url, header);
-
-    if (reply->error() == QNetworkReply::NoError) {
-        auto doc = QJsonDocument::fromJson(reply->readAll()).object();
-        co_return doc;
-    }
-    co_return QJsonObject();
-}
-
-QCoro::Task<QJsonObject> APIClient::proxies() const 
-{
-    return this->get("/proxies");
+    return Components::HttpClient::instance().awaitGet(url, header);
 }
 
 } // namespace Clash::Meta::Core

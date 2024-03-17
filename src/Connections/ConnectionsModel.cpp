@@ -31,7 +31,8 @@ ConnectionsModel::~ConnectionsModel() {}
 QCoro::Task<> ConnectionsModel::__update()
 {
     updateTimer_->stop();
-    auto data = co_await Core::APIClient::instance().connections();
+    Core::APIClient client;
+    auto data = co_await client.connections();
     if (!data.isEmpty()) {
         auto _downloadTotal = data["downloadTotal"].toInteger();
         if (_downloadTotal != downloadTotal_) {

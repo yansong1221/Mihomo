@@ -6,8 +6,8 @@ import QtQuick.Layouts
 import QtQml
 import "./ControlBar"
 import "./WindowBar"
-import Clash.Meta.GUI 1.0
-import FluentUI 1.0
+import Clash.Meta
+import FluentUI
 
 ClashWindow {
     id: window
@@ -19,8 +19,8 @@ ClashWindow {
     Component.onCompleted: {
         FluTheme.darkMode = false;
         FluTheme.darkMode = true;
-
-        //ClashMetaProcess.restart()
+        window.visible = true
+        ClashMetaProcess.restart()
     }
 
     WindowBar {

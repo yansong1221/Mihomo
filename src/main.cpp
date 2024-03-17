@@ -19,6 +19,8 @@ Q_IMPORT_QML_PLUGIN(FluentUIPlugin)
 #endif
 #include <FluentUI.h>
 #endif
+#include <qcoro/qml/qcoroqml.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +41,7 @@ int main(int argc, char *argv[])
     qputenv("QSG_RENDER_LOOP", "basic");
 #endif
 
-    QCoreApplication::setOrganizationName("MetaCubeX1");
+    QCoreApplication::setOrganizationName("MetaCubeX");
     QCoreApplication::setApplicationName("ClashMeta-GUI");
 
     Application app(argc, argv);
@@ -51,12 +53,12 @@ int main(int argc, char *argv[])
 
     QWK::registerTypes(&engine);
     Application::registerTypes(&engine);
-
+    QCoro::Qml::registerTypes();
 #ifdef FLUENTUI_BUILD_STATIC_LIB
     FluentUI::getInstance()->registerTypes(&engine);
 #endif
 
-    QUrl url(QStringLiteral("qrc:/Clash/Meta/GUI/qml/main.qml"));
+    QUrl url(QStringLiteral("qrc:/Clash/Meta/qml/main.qml"));
 
     QObject::connect(
         &engine,

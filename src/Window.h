@@ -5,7 +5,7 @@ class Window : public QQuickWindow
 {
     Q_OBJECT
 public:
-    using QQuickWindow::QQuickWindow;
+    explicit Window(QWindow *parent = nullptr);
 
     Q_PROPERTY(bool stayTop READ stayTop WRITE setStayTop NOTIFY stayTopChanged);
 

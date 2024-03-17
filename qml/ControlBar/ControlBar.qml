@@ -7,17 +7,17 @@ FluNavigationView {
     z: 999
     autoSuggestBox: FluAutoSuggestBox {
         iconSource: FluentIcons.Search
-        items: ItemsOriginal.getSearchData()
+        //items: ItemsOriginal.getSearchData()
         placeholderText: qsTr("Search")
         onItemClicked: data => {
-            ItemsOriginal.startPageByItem(data);
+            //ItemsOriginal.startPageByItem(data);
         }
     }
     items: FluObject {
         FluPaneItem {
             title: qsTr("Home")
             icon: FluentIcons.Home
-            url:"/Clash/Meta/GUI/qml/Page/T_Home.qml"
+            url:"/Clash/Meta/qml/Page/T_Home.qml"
             onTap: {
                 navigationView.push(url)
             }
@@ -25,7 +25,7 @@ FluNavigationView {
         FluPaneItem {
             title: qsTr("Proxies")
             icon: FluentIcons.Home
-            url:"/Clash/Meta/GUI/qml/Page/T_Proxies.qml"
+            url:"/Clash/Meta/qml/Page/T_Proxies.qml"
             onTap: {
                 navigationView.push(url)
             }

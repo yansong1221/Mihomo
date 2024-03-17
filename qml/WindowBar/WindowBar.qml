@@ -6,7 +6,6 @@ import FluentUI
 
 Rectangle {
     id: root
-    visible : false
     property var window
     color:"transparent"
     //color: window && window.active ? "#3C3C3C" : "#505050"
@@ -20,9 +19,7 @@ Rectangle {
         windowAgent.setHitTestVisible(stayTopButton);
         if (root.isOSX)
             windowAgent.setSystemButtonArea(macSystemButton);
-        root.window.visible = true;
         //root.window.stayTop = true;
-        root.visible = true
     }
 
     WindowAgent {

@@ -23,7 +23,7 @@ QString YamlBuilder::yamlFromUrl(const QUrl &url)
     } catch (const std::exception & e) {
         qDebug() << e.what();
     }
-    
+    return QString();
 }
 
 bool YamlBuilder::writeFile(const QString &data, const QString &path)

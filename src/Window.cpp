@@ -5,6 +5,9 @@
 #endif
 
 namespace Clash::Meta::GUI {
+Window::Window(QWindow *parent /*= nullptr*/)
+    : QQuickWindow(parent)
+{}
 bool Window::stayTop() const
 {
     return stayTop_;

@@ -8,7 +8,8 @@ HttpClient &HttpClient::instance()
     return s_instance;
 }
 
-QCoro::Task<QNetworkReply *> HttpClient::awaitGet(const QUrl &url, const Headers &headers)
+QCoro::Task<QNetworkReply *> HttpClient::awaitGet(const QUrl &url,
+                                                  const Headers &headers)
 {
     QNetworkRequest request(url);
     std::for_each(headers.begin(), headers.end(), [&](const auto &iter) {
