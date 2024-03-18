@@ -33,7 +33,7 @@ void GroupModel::parse(const QJsonObject &obj)
 
         auto type = value["type"].toString();
 
-        if (type == "Selector" || type == "URLTest") {
+        if (type == "Selector" || type == "URLTest" || type == "Fallback") {
             auto udp = value["udp"].toBool();
             auto now = value["now"].toString();
             auto groupName = value["name"].toString();

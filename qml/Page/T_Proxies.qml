@@ -17,56 +17,108 @@ FluContentPage {
     }
     ColumnLayout {
         anchors.fill: parent
-        Rectangle {
-            id: mode
-            implicitHeight: 80
+        Item {
             Layout.fillWidth: true
-            color: "red"
-            RowLayout {
+            implicitHeight: 80
+
+            ListView {
+                id: tabListView
                 anchors.centerIn: parent
-                spacing: 20
-                ModeButton {
-                    text: qsTr("Global")
-                    checkable: true
-                    darkSource: "qrc:/assets/icons/dark/network-port.svg"
-                    lightSource: "qrc:/assets/icons/light/network-port.svg"
-                    onClicked:
-                    //checked = !checked;
-                    {
+                //width: 50 * model.count
+                width: parent.width
+                height: parent.height
+                clip: true
+                property int previousIndex: -1
+
+                orientation: ListView.Horizontal
+                model: ListModel {
+                    ListElement {
+                        title: qsTr("Global")
+                        content: "Content of Tab 1"
+                    }
+                    ListElement {
+                        title: qsTr("Rule")
+                        content: "Content of Tab 2"
+                    }
+                    ListElement {
+                        title: qsTr("Direct")
+                        content: "Content of Tab 3"
+                    }
+                    ListElement {
+                        title: qsTr("Global")
+                        content: "Content of Tab 1"
+                    }
+                    ListElement {
+                        title: qsTr("Rule")
+                        content: "Content of Tab 2"
+                    }
+                    ListElement {
+                        title: qsTr("Direct")
+                        content: "Content of Tab 3"
+                    }
+                    ListElement {
+                        title: qsTr("Global")
+                        content: "Content of Tab 1"
+                    }
+                    ListElement {
+                        title: qsTr("Rule")
+                        content: "Content of Tab 2"
+                    }
+                    ListElement {
+                        title: qsTr("Direct")
+                        content: "Content of Tab 3"
                     }
                 }
-                ModeButton {
-                    text: qsTr("Rule")
-                    checkable: true
-                    darkSource: "qrc:/assets/icons/dark/network-port.svg"
-                    lightSource: "qrc:/assets/icons/light/network-port.svg"
-                    onClicked:
-                    //checked = !checked;
-                    {
+                delegate: Item {
+                    width: 50
+                    height: 30
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "transparent"
+
+                        //border.color: "black"
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: model.title
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                tabListView.previousIndex = tabListView.currentIndex;
+                                tabListView.currentIndex = index;
+                            }
+                        }
                     }
                 }
-                ModeButton {
-                    text: qsTr("Direct")
-                    checkable: true
-                    darkSource: "qrc:/assets/icons/dark/network-port.svg"
-                    lightSource: "qrc:/assets/icons/light/network-port.svg"
-                    onClicked:
-                    //checked = !checked;
-                    {
+                highlight: Rectangle {
+                    //高亮
+                    //width: 100
+                    //height: 30
+                    color: "black"
+                    x: tabListView.currentItem.x
+                    Behavior on x {
+                        //点击选中的时候会有个动画
+                        SpringAnimation {
+                            spring: 3
+                            damping: 0.2
+                        }
                     }
                 }
             }
         }
-
         ListView {
-            id: listView
+            id: grouplistView
             Layout.fillHeight: true
             Layout.fillWidth: true
             clip: true
             orientation: ListView.Vertical
-            ScrollBar.vertical: FluScrollBar {}
+            ScrollBar.vertical: FluScrollBar {
+            }
             delegate: GroupItem {
-                width: listView.width
+                width: grouplistView.width
                 model: display
 
                 Component.onCompleted: {
