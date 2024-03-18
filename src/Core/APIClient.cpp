@@ -62,4 +62,25 @@ QCoro::Task<QNetworkReply *> APIClient::get(const QString &path, const QUrlQuery
     return Components::HttpClient::instance().awaitGet(url, header);
 }
 
+QCoro::Task<QNetworkReply *> APIClient::slectProxies(const QString &proxy, const QString &name)
+{
+    const auto &controller = Config::ClashConfigurator::instance().controller;
+
+    QUrl url;
+    url.setHost(controller.http.host);
+    url.setPort(controller.http.port);
+    url.setScheme("http");
+    //url.setPath(QString("/proxies/%1").arg(QUrl::toPercentEncoding(proxy)));
+    url.setPath(QString("/proxies/%1").arg(proxy));
+
+    Components::HttpClient::Headers header;
+    if (controller.secret)
+        header["Authorization"] = QString("Bearer %1").arg(*controller.secret);
+
+    QJsonObject body;
+    body["name"] = name;
+
+    return Components::HttpClient::instance().awaitResquest("PUT", url, body, header);
+}
+
 } // namespace Clash::Meta::Core

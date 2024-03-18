@@ -18,6 +18,7 @@ ClashWindow {
     title: qsTr("Hello, world!")
     Component.onCompleted: {
         //FluTheme.dark = true;
+        FluTheme.enableAnimation = false
         window.visible = true
         ClashMetaProcess.restart()
     }

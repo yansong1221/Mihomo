@@ -1,5 +1,6 @@
 #include "ProxiesGroupModel.h"
 #include "Core/APIClient.h"
+#include "ProxiesGroupItemModel.h"
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QStringList>
@@ -7,125 +8,10 @@
 
 namespace Clash::Meta::Proxies {
 
-class AbstractNode
-{
-public:
-    virtual ~AbstractNode() = default;
-
-    bool alive = false;
-    bool tfo = false;
-    bool udp = false;
-    bool xudp = false;
-    QString name;
-
-    virtual QString type() const = 0;
-    virtual bool isGroup() const = 0;
-
-    virtual int delay() const { return -1; }
-
-public:
-    bool parse(const QJsonObject &obj)
-    {
-        name = obj["name"].toString();
-        alive = obj["alive"].toBool();
-        tfo = obj["tfo"].toBool();
-        udp = obj["udp"].toBool();
-        xudp = obj["xudp"].toBool();
-
-        return onParseData(obj);
-    }
-
-protected:
-    virtual bool onParseData(const QJsonObject &obj) { return true; }
-};
-class AbstractGroupNode : public AbstractNode
-{
-public:
-    QStringList all;
-    QString now;
-
-    enum class GroupType { GLOBAL, RULE };
-    GroupType groupType() const
-    {
-        return this->name != "GLOBAL" ? GroupType::RULE : GroupType::GLOBAL;
-    }
-
-    virtual bool selectable() const = 0;
-
-protected:
-    virtual bool onParseData(const QJsonObject &obj) override
-    {
-        all.clear();
-        now.clear();
-
-        auto __all = obj["all"].toArray();
-        for (const auto &item : __all.toVariantList())
-            all << item.toString();
-
-        now = obj["now"].toString();
-        return true;
-    }
-
-private:
-    virtual bool isGroup() const final { return true; }
-};
-
-class AbstractSingleNode : public AbstractNode
-{
-private:
-    virtual bool isGroup() const { return false; };
-};
-
-class Compatible : public AbstractSingleNode
-{
-public:
-    inline const static QString Type = "Compatible";
-    virtual QString type() const override { return Type; }
-};
-
-class Direct : public AbstractSingleNode
-{
-public:
-    inline const static QString Type = "Direct";
-    virtual QString type() const override { return Type; }
-};
-class Reject : public AbstractSingleNode
-{
-public:
-    inline const static QString Type = "Reject";
-    virtual QString type() const override { return Type; }
-};
-class Pass : public AbstractSingleNode
-{
-public:
-    inline const static QString Type = "Pass";
-    virtual QString type() const override { return Type; }
-};
-class RejectDrop : public AbstractSingleNode
-{
-public:
-    inline const static QString Type = "RejectDrop";
-    virtual QString type() const override { return Type; }
-};
-
-class Selector : public AbstractGroupNode
-{
-public:
-    inline const static QString Type = "Selector";
-    virtual QString type() const override { return Type; }
-    virtual bool selectable() const override { return true; }
-};
-class URLTest : public AbstractGroupNode
-{
-public:
-    inline const static QString Type = "URLTest";
-    virtual QString type() const override { return Type; }
-    virtual bool selectable() const override { return false; }
-};
-
 GroupModel::GroupModel(QObject *parent /*= nullptr*/)
     : QAbstractListModel(parent)
-{}
+{
+}
 
 GroupModel::~GroupModel() {}
 
@@ -138,23 +24,58 @@ void GroupModel::parse(const QJsonObject &obj)
     auto proxies = obj["proxies"].toObject();
     if (proxies.isEmpty())
         return;
+
+    auto findProxyObject = [&](const QString &key) { return proxies[key].toObject(); };
+
     for (auto iter = proxies.constBegin(); iter != proxies.constEnd(); ++iter) {
-        if (iter.key() == Selector::Type) {
-        } else if (iter.key() == URLTest::Type) {
-        } else if (iter.key() == Compatible::Type) {
-        } else if (iter.key() == Direct::Type) {
-        } else if (iter.key() == Reject::Type) {
+        auto key = iter.key();
+        auto value = iter.value().toObject();
+
+        auto type = value["type"].toString();
+
+        if (type == "Selector" || type == "URLTest") {
+            auto udp = value["udp"].toBool();
+            auto now = value["now"].toString();
+            auto groupName = value["name"].toString();
+
+            QList<GroupItemModel::ProxyInfo> proxyInfos;
+            for (const auto &item : value["all"].toArray()) {
+                auto proxyName = item.toString();
+                auto proxyObj = findProxyObject(proxyName);
+
+                GroupItemModel::ProxyInfo info;
+                info.proxyName = item.toString();
+                info.type = proxyObj["type"].toString();
+                info.isUdp = proxyObj["udp"].toBool();
+
+                for (const auto &item : proxyObj["history"].toArray())
+                    info.delay = item.toObject()["delay"].toInt();
+
+                proxyInfos << info;
+            }
+
+            auto groupItem = new GroupItemModel(this);
+            groupItem->init(groupName == "GLOBAL" ? GroupItemModel::GlobalGroup
+                                                  : GroupItemModel::RuleGroup,
+                            groupName,
+                            proxyInfos,
+                            now);
+
+            items_ << groupItem;
         }
     }
 }
 
 int GroupModel::rowCount(const QModelIndex &parent /*= QModelIndex()*/) const
 {
-    return 0;
+    return items_.length();
 }
 
 QVariant GroupModel::data(const QModelIndex &index, int role /*= Qt::DisplayRole*/) const
 {
+    if (role == Qt::DisplayRole) {
+        return QVariant::fromValue(items_[index.row()]);
+    }
     return QVariant();
 }
 
@@ -171,7 +92,23 @@ QCoro::Task<> GroupModel::__reload()
         QTimer::singleShot(1000, this, &GroupModel::reload);
         co_return;
     }
+    this->beginResetModel();
+    for (const auto &item : items_)
+        item->deleteLater();
+    items_.clear();
+
     parse(obj);
+    this->endResetModel();
+}
+
+QModelIndex GroupModel::index(int row,
+                              int column /*= 0*/,
+                              const QModelIndex &parent /*= QModelIndex()*/) const
+{
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+
+    return createIndex(row, column, items_[row]);
 }
 
 } // namespace Clash::Meta::Proxies

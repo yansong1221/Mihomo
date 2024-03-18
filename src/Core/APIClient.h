@@ -22,6 +22,7 @@ public:
     QCoro::Task<QNetworkReply *> delay(const QString &proxy,
                                        const QString &testUrl,
                                        int timeout) const;
+    QCoro::Task<QNetworkReply *> slectProxies(const QString &proxy, const QString &name);
 
 private:
     QCoro::Task<QJsonObject> getOKJson(const QString &path) const;

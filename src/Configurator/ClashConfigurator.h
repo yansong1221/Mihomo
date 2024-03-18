@@ -92,7 +92,7 @@ public:
          * 外部控制器，可以使用 RESTful API 来控制你的 Clash 内核
          * API 监听地址，你可以将 127.0.0.1 修改为 0.0.0.0 来监听所有 IP
          */
-        Endpoint http = {"127.0.0.1", 9090};
+        Endpoint http = {"127.0.0.1", 9097};
 
         /*
         * HTTPS-API 监听地址，需要配置 tls 部分证书和其私钥配置，使用 TLS 也必须填写 external-controller

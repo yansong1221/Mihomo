@@ -5,24 +5,20 @@
 #include <QtQml/QQmlEngine>
 #include <qcoro/qcorotask.h>
 namespace Clash::Meta::Proxies {
+
+class GroupItemModel;
 class GroupModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    struct GroupItem
-    {
-        QString key;
-
-        QString name;
-        QString now;
-        QString type;
-    };
     explicit GroupModel(QObject *parent = nullptr);
     ~GroupModel();
 
 public:
+    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    //QHash<int, QByteArray> roleNames() const override;
 
     static QObject *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
     {
@@ -41,5 +37,6 @@ private:
 
 private:
     bool isLoadding_ = false;
+    QList<GroupItemModel *> items_;
 };
 } // namespace Clash::Meta::Proxies

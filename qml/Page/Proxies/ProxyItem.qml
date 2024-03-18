@@ -7,8 +7,8 @@ Item {
     id: root
     property int delay: 100
     property bool udp: false
-    property string name: "TCPSJDHJ"
-    property string type: "TCPSJDHJ111111111111111111\nTCPSJDHJ111111111111111111\nTCPSJDHJ111111111111111111"
+    property string name: ""
+    property string type: ""
     property bool isDelayDetecting: false
     property bool checked: false
 
