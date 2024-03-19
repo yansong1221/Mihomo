@@ -2,6 +2,7 @@ import FluentUI
 import QtQuick
 import QtQuick.Layouts
 
+/*
 FluExpander {
     id: root
     property var model
@@ -56,23 +57,20 @@ FluExpander {
         }
     }
 }
+*/
 
-
-
-/*
 Item {
     id: root
     property var model
     property bool expand: true
     //height: view.visible ? view.height : 0 + title.implicitHeight
     //contentHeight: view.height
-    implicitHeight: expand ? view.contentHeight + title.implicitHeight :  title.implicitHeight
+    implicitHeight: expand ? view.contentHeight + title.implicitHeight : title.implicitHeight
     clip: true
     Component.onCompleted: {
         //headerText = model.groupName;
         view.model = model;
     }
-
 
     Rectangle {
         id: title
@@ -104,6 +102,16 @@ Item {
         //anchors.fill: parent
         //height: 100
         delegate: proxyItemDelegate
+        highlight: Item {
+            z: view.z + 2
+            Rectangle {
+                anchors.fill: parent
+                //anchors.leftMargin: tabListView.itemSapcing
+
+                color: FluTheme.itemPressColor
+                radius: tabListView.itemRadius
+            }
+        }
         //model: root.model
         cellWidth: 300 // 设置每个元素的宽度
         cellHeight: 70 // 设置每个元素的高度
@@ -138,4 +146,3 @@ Item {
         }
     }
 }
-*/

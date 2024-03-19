@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1
 import QtQuick.Layouts
 import QtQml
-import "./ControlBar"
+
 import "./WindowBar"
 import Clash.Meta
 import FluentUI
@@ -33,7 +33,7 @@ ClashWindow {
         }
         height: 32
     }
-    ControlBar {
+    ContentPage {
         id: controlBar
         anchors {
             top: titleBar.bottom
