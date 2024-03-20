@@ -7,13 +7,14 @@ import Clash.Meta
 
 Item {
     id: root1
+
     //title: qsTr("Proxies")
 
     Component.onCompleted: {
-        proxiesModel.reload();
+        proxiesModelFilter.reload();
     }
-    ProxiesGroupModel {
-        id: proxiesModel
+    ProxiesGroupModelFilter {
+        id: proxiesModelFilter
     }
     ColumnLayout {
         anchors.fill: parent
@@ -22,12 +23,27 @@ Item {
             implicitHeight: 80
 
             ListView {
-                id: tabListView
+                id: modeListView
                 anchors.centerIn: parent
                 width: itemWidth * model.count
                 height: 30
                 clip: true
                 highlightMoveDuration: 200
+                currentIndex: {
+                    for (var i = 0; i < model.count; ++i) {
+                        var item = model.get(i);
+                        if (item.content === ClashRuntimeConfigure.mode)
+                            return i;
+                    }
+                    return -1;
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex == -1)
+                        proxiesModelFilter.filerMode = "";
+                    else
+                        proxiesModelFilter.filerMode = model.get(currentIndex).content;
+                }
+
                 //interactive: false
 
                 property int itemWidth: 80
@@ -38,29 +54,29 @@ Item {
                 model: ListModel {
                     ListElement {
                         title: qsTr("Global")
-                        content: "Content of Tab 1"
+                        content: "global"
                     }
                     ListElement {
                         title: qsTr("Rule")
-                        content: "Content of Tab 2"
+                        content: "rule"
                     }
                     ListElement {
                         title: qsTr("Direct")
-                        content: "Content of Tab 3"
+                        content: "direct"
                     }
                 }
                 delegate: Item {
-                    width: tabListView.itemWidth
-                    height: tabListView.height
+                    width: modeListView.itemWidth
+                    height: modeListView.height
                     Rectangle {
 
                         anchors.fill: parent
-                        anchors.leftMargin: tabListView.itemSapcing
+                        anchors.leftMargin: modeListView.itemSapcing
 
                         color: FluTheme.dark ? Window.active ? Qt.rgba(38 / 255, 44 / 255, 54 / 255, 1) : Qt.rgba(39 / 255, 39 / 255, 39 / 255, 1) : Qt.rgba(251 / 255, 251 / 255, 253 / 255, 1)
                         border.color: FluTheme.dark ? Window.active ? Qt.rgba(55 / 255, 55 / 255, 55 / 255, 1) : Qt.rgba(45 / 255, 45 / 255, 45 / 255, 1) : Qt.rgba(226 / 255, 229 / 255, 234 / 255, 1)
 
-                        radius: tabListView.itemRadius
+                        radius: modeListView.itemRadius
                         FluText {
                             anchors.centerIn: parent
                             text: model.title
@@ -68,9 +84,9 @@ Item {
 
                         MouseArea {
                             anchors.fill: parent
-                            hoverEnabled :true
+                            hoverEnabled: true
                             onClicked: {
-                                tabListView.currentIndex = index;
+                                ClashRuntimeConfigure.mode = model.content;
                             }
                             onEntered: {
                                 cursorShape = Qt.PointingHandCursor;
@@ -83,41 +99,54 @@ Item {
                     }
                 }
                 highlight: Item {
-                    z: tabListView.z + 2
+                    z: modeListView.z + 2
                     Rectangle {
                         anchors.fill: parent
-                        anchors.leftMargin: tabListView.itemSapcing
+                        anchors.leftMargin: modeListView.itemSapcing
 
                         color: FluTheme.itemPressColor
-                        radius: tabListView.itemRadius
+                        radius: modeListView.itemRadius
                         Rectangle {
                             width: parent.width
                             anchors.bottom: parent.bottom
                             height: 3
                             color: "#0066b4"
-                            radius:2
+                            radius: 2
                         }
                     }
-
                 }
             }
         }
-        ListView {
-            id: grouplistView
+
+        Flickable {
+            clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
-            clip: true
-            orientation: ListView.Vertical
             ScrollBar.vertical: FluScrollBar {
             }
-            delegate: GroupItem {
-                width: grouplistView.width
-                model: display
+            contentHeight: {
+                var height = 100;
+                for (var i = 0; i < repeater.count; ++i) {
+                    var item = repeater.itemAt(i);
+                    height += item.height;
+                }
+                return height;
+            }
+            contentWidth: width
 
-                Component.onCompleted: {
+            Column {
+                id: layout
+                spacing: 0
+                anchors.fill: parent
+                Repeater {
+                    id: repeater
+                    delegate: GroupItem {
+                        width: parent.width
+                        model: display
+                    }
+                    model: proxiesModelFilter
                 }
             }
-            model: proxiesModel
         }
     }
 }

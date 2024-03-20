@@ -10,8 +10,7 @@ namespace Clash::Meta::Proxies {
 
 GroupModel::GroupModel(QObject *parent /*= nullptr*/)
     : QAbstractListModel(parent)
-{
-}
+{}
 
 GroupModel::~GroupModel() {}
 
@@ -109,6 +108,38 @@ QModelIndex GroupModel::index(int row,
         return QModelIndex();
 
     return createIndex(row, column, items_[row]);
+}
+
+GroupModelFilter::GroupModelFilter(QObject *parent /*= nullptr*/)
+    : QSortFilterProxyModel(parent)
+{
+    model_ = new GroupModel(this);
+    setSourceModel(model_);
+}
+
+void GroupModelFilter::setFilerMode(const QString &mode)
+{
+    if (filerMode_ == mode)
+        return;
+
+    filerMode_ = mode;
+    Q_EMIT filerModeChanged(filerMode_);
+    invalidateRowsFilter();
+}
+
+bool GroupModelFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    auto index = model_->index(source_row, 0, source_parent);
+    auto item = static_cast<GroupItemModel *>(index.internalPointer());
+
+    if (filerMode_.compare("global", Qt::CaseInsensitive) == 0) {
+        if (item->groupType() == GroupItemModel::GlobalGroup)
+            return true;
+    } else if (filerMode_.compare("rule", Qt::CaseInsensitive) == 0) {
+        if (item->groupType() != GroupItemModel::GlobalGroup)
+            return true;
+    }
+    return false;
 }
 
 } // namespace Clash::Meta::Proxies

@@ -111,6 +111,15 @@ void GroupItemModel::clear()
     removeRows(0, rowCount());
 }
 
+void GroupItemModel::setExpand(bool flag)
+{
+    if (isExpand_ == flag)
+        return;
+
+    isExpand_ = flag;
+    Q_EMIT expandChanged(isExpand_);
+}
+
 GroupItemModel::ProxyItem::ProxyItem(const ProxyInfo &info, QObject *parent /*= nullptr*/)
     : QObject(parent)
     , info_(info)

@@ -23,12 +23,18 @@ public:
                                        const QString &testUrl,
                                        int timeout) const;
     QCoro::Task<QNetworkReply *> slectProxies(const QString &proxy, const QString &name);
+    QCoro::Task<QNetworkReply *> changeProxyMode(const QString &mode);
+    QCoro::Task<QNetworkReply *> configs();
 
 private:
     QCoro::Task<QJsonObject> getOKJson(const QString &path) const;
 
     QCoro::Task<QNetworkReply *> get(const QString &path,
                                      const QUrlQuery &query = QUrlQuery()) const;
+
+    QCoro::Task<QNetworkReply *> sendJsonData(const QString &method,
+                                              const QString &path,
+                                              const QJsonObject &body) const;
 
 private:
 };

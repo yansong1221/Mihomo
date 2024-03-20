@@ -18,6 +18,7 @@ public:
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
     Q_PROPERTY(QString currentName READ currentName NOTIFY currentNameChanged)
     Q_PROPERTY(QString groupName READ groupName)
+    Q_PROPERTY(bool expand READ isExpand WRITE setExpand NOTIFY expandChanged)
 public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -37,6 +38,7 @@ public:
               const QString &currentProxyName);
 
     void clear();
+    GroupType groupType() const { return groupType_; }
 
 public:
     int currentIndex() const { return currentIndex_; }
@@ -44,18 +46,24 @@ public:
     QString currentName() const;
     QString groupName() const { return groupName_; }
 
+    bool isExpand() const { return isExpand_; }
+    void setExpand(bool flag);
+
 private:
     QCoro::Task<> __setCurrentIndex(int index);
 
 signals:
     void currentIndexChanged(int index);
     void currentNameChanged(const QString &name);
+    void expandChanged(bool expand);
 
 private:
     QList<ProxyItem *> items_;
     int currentIndex_ = -1;
     QString groupName_;
     GroupType groupType_;
+
+    bool isExpand_ = false; // 记录界面是否展开
 };
 
 class GroupItemModel::ProxyItem : public QObject
