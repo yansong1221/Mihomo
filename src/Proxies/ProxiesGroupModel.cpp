@@ -37,28 +37,25 @@ void GroupModel::parse(const QJsonObject &obj)
             auto now = value["now"].toString();
             auto groupName = value["name"].toString();
 
-            QList<GroupItemModel::ProxyInfo> proxyInfos;
+            auto groupItem = new GroupItemModel(groupName == "GLOBAL" ? GroupItemModel::GlobalGroup
+                                                                      : GroupItemModel::RuleGroup,
+                                                groupName,
+                                                this);
+
             for (const auto &item : value["all"].toArray()) {
                 auto proxyName = item.toString();
                 auto proxyObj = findProxyObject(proxyName);
 
-                GroupItemModel::ProxyInfo info;
-                info.proxyName = item.toString();
-                info.type = proxyObj["type"].toString();
-                info.isUdp = proxyObj["udp"].toBool();
-
+                int delay = -2;
                 for (const auto &item : proxyObj["history"].toArray())
-                    info.delay = item.toObject()["delay"].toInt();
+                    delay = item.toObject()["delay"].toInt();
 
-                proxyInfos << info;
+                groupItem->append(proxyName,
+                                  proxyObj["type"].toString(),
+                                  proxyObj["udp"].toBool(),
+                                  delay);
             }
-
-            auto groupItem = new GroupItemModel(this);
-            groupItem->init(groupName == "GLOBAL" ? GroupItemModel::GlobalGroup
-                                                  : GroupItemModel::RuleGroup,
-                            groupName,
-                            proxyInfos,
-                            now);
+            groupItem->setCurrentProxyName(now);
 
             items_ << groupItem;
         }

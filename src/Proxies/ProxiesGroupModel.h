@@ -23,14 +23,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     //QHash<int, QByteArray> roleNames() const override;
 
-    static QObject *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
-    {
-        Q_UNUSED(qmlEngine)
-        Q_UNUSED(jsEngine)
-
-        return new GroupModel(qmlEngine->rootContext()->parent());
-    }
-public slots:
+public:
     void reload();
 
 private:

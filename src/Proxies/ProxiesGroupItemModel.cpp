@@ -5,8 +5,12 @@
 #include <QNetworkReply>
 
 namespace Clash::Meta::Proxies {
-GroupItemModel::GroupItemModel(QObject *parent /*= nullptr*/)
+GroupItemModel::GroupItemModel(GroupType groupType,
+                               const QString &groupName,
+                               QObject *parent /*= nullptr*/)
     : QAbstractListModel(parent)
+    , groupType_(groupType)
+    , groupName_(groupName)
 {}
 
 GroupItemModel::~GroupItemModel() {}
@@ -18,7 +22,7 @@ QModelIndex GroupItemModel::index(int row,
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    return createIndex(row, column, items_[row]);
+    return createIndex(row, column, &items_[row]);
 }
 
 int GroupItemModel::rowCount(const QModelIndex &parent /*= QModelIndex()*/) const
@@ -27,35 +31,45 @@ int GroupItemModel::rowCount(const QModelIndex &parent /*= QModelIndex()*/) cons
 }
 QVariant GroupItemModel::data(const QModelIndex &index, int role /*= Qt::DisplayRole*/) const
 {
-    if (role == Qt::DisplayRole) {
-        return QVariant::fromValue(items_[index.row()]);
+    const auto &item = items_[index.row()];
+    switch (role) {
+    case ProxyDelayRole:
+        return item.delay;
+    case ProxyNameRole:
+        return item.proxyName;
+    case ProxyTypeRole:
+        return item.type;
+    case ProxyUdpRole:
+        return item.isUdp;
+    case ProxyDelayDetectingRole:
+        return item.delayDetecting;
+    default:
+        break;
     }
     return QVariant();
 }
 
-void GroupItemModel::setCurrentIndex(int index)
+void GroupItemModel::setCurrentIndex(int row)
 {
-    __setCurrentIndex(index);
+    __setCurrentIndex(row);
 }
 
-QCoro::Task<> GroupItemModel::__setCurrentIndex(int index)
+QCoro::Task<> GroupItemModel::__setCurrentIndex(int row)
 {
-    if (currentIndex_ == index)
+    if (currentIndex_ == row)
         co_return;
 
-    auto modelIndex = this->index(index, 0);
-    auto item = static_cast<ProxyItem *>(modelIndex.internalPointer());
+    auto &item = items_[row];
 
     Core::APIClient client;
-    auto reply = co_await client.slectProxies(groupName_, item->name());
+    auto reply = co_await client.slectProxies(groupName_, item.proxyName);
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << reply->errorString();
         co_return;
     }
-    qDebug() << reply->readAll();
+    currentIndex_ = row;
 
-    currentIndex_ = index;
-    Q_EMIT currentIndexChanged(index);
+    Q_EMIT currentIndexChanged(currentIndex_);
     Q_EMIT currentNameChanged(currentName());
 }
 
@@ -64,33 +78,7 @@ QString GroupItemModel::currentName() const
     if (currentIndex_ == -1)
         return QString();
 
-    auto modelIndex = this->index(currentIndex_, 0);
-    auto item = static_cast<ProxyItem *>(modelIndex.internalPointer());
-    return item->name();
-}
-
-void GroupItemModel::init(GroupType groupType,
-                          const QString &groupName,
-                          const QList<ProxyInfo> &proxyInfos,
-                          const QString &currentProxyName)
-{
-    this->clear();
-
-    groupType_ = groupType;
-    groupName_ = groupName;
-    for (int i = 0; i < proxyInfos.length(); ++i) {
-        const auto &info = proxyInfos[i];
-
-        this->beginInsertRows(QModelIndex(), i, i);
-        items_ << new ProxyItem(info, this);
-        this->endInsertRows();
-
-        if (info.proxyName == currentProxyName) {
-            currentIndex_ = i;
-            Q_EMIT currentIndexChanged(currentIndex_);
-            Q_EMIT currentNameChanged(currentName());
-        }
-    }
+    return items_[currentIndex_].proxyName;
 }
 
 bool GroupItemModel::removeRows(int row, int count, const QModelIndex &parent /*= QModelIndex()*/)
@@ -99,8 +87,6 @@ bool GroupItemModel::removeRows(int row, int count, const QModelIndex &parent /*
         return false;
 
     beginRemoveRows(parent, row, row + count - 1);
-    for (int i = row; i < row + count; ++i)
-        items_[i]->deleteLater();
     items_.remove(row, count);
     endRemoveRows();
     return true;
@@ -111,56 +97,78 @@ void GroupItemModel::clear()
     removeRows(0, rowCount());
 }
 
-void GroupItemModel::setExpand(bool flag)
+QHash<int, QByteArray> GroupItemModel::roleNames() const
 {
-    if (isExpand_ == flag)
-        return;
-
-    isExpand_ = flag;
-    Q_EMIT expandChanged(isExpand_);
+    QHash<int, QByteArray> roles;
+    roles[ProxyDelayRole] = "delayRole";
+    roles[ProxyNameRole] = "nameRole";
+    roles[ProxyTypeRole] = "typeRole";
+    roles[ProxyUdpRole] = "udpRole";
+    roles[ProxyDelayDetectingRole] = "delayDetectingRole";
+    return roles;
 }
 
-GroupItemModel::ProxyItem::ProxyItem(const ProxyInfo &info, QObject *parent /*= nullptr*/)
-    : QObject(parent)
-    , info_(info)
-{}
-
-GroupItemModel::ProxyItem::~ProxyItem() {}
-
-void GroupItemModel::ProxyItem::delayDetect()
+void GroupItemModel::delayDetect(int row)
 {
-    __delayDetect();
+    __delayDetect(row);
 }
 
-QCoro::Task<> GroupItemModel::ProxyItem::__delayDetect()
+QCoro::Task<> GroupItemModel::__delayDetect(int row)
 {
-    if (delayDetecting_)
+    auto &item = items_[row];
+    if (item.delayDetecting)
         co_return;
 
-    delayDetecting_ = true;
-    Q_EMIT delayDetectingChanged(true);
+    item.delayDetecting = true;
+    Q_EMIT dataChanged(index(row), index(row), {ProxyDelayDetectingRole});
 
     Core::APIClient client;
-    auto reply = co_await client.delay(info_.proxyName, "https://www.google.com", 5000);
+    auto reply = co_await client.delay(item.proxyName, "https://www.google.com", 5000);
 
-    delayDetecting_ = false;
-    Q_EMIT delayDetectingChanged(false);
+    item.delayDetecting = false;
+    Q_EMIT dataChanged(index(row), index(row), {ProxyDelayDetectingRole});
 
     if (reply->error() == QNetworkReply::NoError) {
         auto obj = QJsonDocument::fromJson(reply->readAll()).object();
         auto delay = obj["delay"].toInt();
-        setDelay(delay);
+        __setDelay(row, delay);
     } else
-        setDelay(-1);
+        __setDelay(row, -1);
 }
 
-void GroupItemModel::ProxyItem::setDelay(int val)
+void GroupItemModel::__setDelay(int row, int val)
 {
-    if (info_.delay == val)
+    auto &item = items_[row];
+    if (item.delay == val)
         return;
 
-    info_.delay = val;
-    Q_EMIT delayChanged(val);
+    item.delay = val;
+    Q_EMIT dataChanged(index(row), index(row), {ProxyDelayRole});
+}
+
+void GroupItemModel::append(const QString &proxyName, const QString &type, bool isUdp, int delay)
+{
+    auto row = items_.length();
+    this->beginInsertRows(QModelIndex(), row, row);
+    ProxyInfo info;
+    info.proxyName = proxyName;
+    info.type = type;
+    info.isUdp = isUdp;
+    info.delay = delay;
+    items_ << info;
+    this->endInsertRows();
+}
+
+void GroupItemModel::setCurrentProxyName(const QString &currentProxyName)
+{
+    for (int i = 0; i < items_.length(); ++i) {
+        const auto &info = items_[i];
+        if (info.proxyName == currentProxyName) {
+            currentIndex_ = i;
+            Q_EMIT currentIndexChanged(currentIndex_);
+            Q_EMIT currentNameChanged(currentName());
+        }
+    }
 }
 
 } // namespace Clash::Meta::Proxies

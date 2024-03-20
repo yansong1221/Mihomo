@@ -19,21 +19,21 @@ FluExpander {
         delegate: ProxyItem {
             width: view.cellWidth // 使用GridView的cellWidth属性
             height: view.cellHeight // 使用GridView的cellHeight属性
-            name: display.name
-            delay: display.delay
+            name: nameRole
+            delay: delayRole
 
             checked: model.index === view.currentIndex
 
             Component.onCompleted: {
-                udp = display.udp;
-                type = display.type;
+                udp = udpRole;
+                type = typeRole;
             }
 
             onSelectProxyClicked: {
                 root.model.currentIndex = model.row;
             }
             onDelayDetectClicked: {
-                display.delayDetect();
+                root.model.delayDetect(index);
             }
         }
         model: root.model
