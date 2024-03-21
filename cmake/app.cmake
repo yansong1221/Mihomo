@@ -38,7 +38,7 @@ PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 PRIVATE SingleApplication::SingleApplication
 PRIVATE QWKQuick
 PRIVATE yaml-cpp::yaml-cpp
-PRIVATE fluentuiplugin fluentui
+#PRIVATE fluentuiplugin
 PRIVATE QCoro${QT_VERSION_MAJOR}Network
 )
 
@@ -69,9 +69,9 @@ PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
 )
 
-if(FLUENTUI_BUILD_STATIC_LIB)
-    target_compile_definitions(${MODULE} PRIVATE FLUENTUI_BUILD_STATIC_LIB)
-endif()
+#if(FLUENTUI_BUILD_STATIC_LIB)
+#    target_compile_definitions(${MODULE} PRIVATE FLUENTUI_BUILD_STATIC_LIB)
+#endif()
 
 target_include_directories(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/3rdparty/SingleApplication)
 target_include_directories(${MODULE} PRIVATE

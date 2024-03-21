@@ -82,7 +82,7 @@ Rectangle {
         onCheckedChanged: {
             if (!window)
                 return;
-            FluTheme.darkMode = checked
+            FluTheme.darkMode = true
             window.stayTop = checked;
         }
     }

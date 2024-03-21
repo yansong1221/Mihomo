@@ -117,35 +117,69 @@ Item {
                 }
             }
         }
+        RowLayout {
 
-        Flickable {
-            clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
-            ScrollBar.vertical: FluScrollBar {
-            }
-            contentHeight: {
-                var height = 100;
-                for (var i = 0; i < repeater.count; ++i) {
-                    var item = repeater.itemAt(i);
-                    height += item.height;
-                }
-                return height;
-            }
-            contentWidth: width
 
-            Column {
-                id: layout
-                spacing: 0
-                anchors.fill: parent
-                Repeater {
-                    id: repeater
-                    delegate: GroupItem {
-                        width: parent.width
-                        model: display
-                    }
-                    model: proxiesModelFilter
+            ListView {
+                id: nav_list
+                //width: parent.width
+                //height: contentHeight
+                boundsBehavior: ListView.StopAtBounds
+                Layout.fillHeight: true
+                implicitWidth: 200
+                clip: true
+                // delegate: GroupItem {
+                //     dataModel: display
+                //     width: parent.width
+                //     ListView.onReused: {
+                //         expand = display.expand;
+                //     }
+                // }
+                ScrollBar.vertical: FluScrollBar {
                 }
+                model: proxiesModelFilter
+                reuseItems: true
+                delegate: FluText {
+                    width: parent.width
+                    text: display.groupName
+                    ListView.onReused:
+                    //expand = display.expand;
+                    {
+                    }
+                    MouseArea {
+
+                        anchors.fill: parent
+                        onClicked: {
+                            nav_list.currentIndex = index;
+                            groupItem.dataModel = display;
+                        }
+                    }
+                }
+                highlight: Item {
+                    z: nav_list.z + 2
+                    Rectangle {
+                        anchors.fill: parent
+
+                        //anchors.topMargin: tabListView.itemSapcing
+
+                        color: FluTheme.itemPressColor
+                        radius: 1.5
+                        Rectangle {
+                            width: 3
+                            anchors.left: parent.left
+                            height: parent.height
+                            color: "#0066b4"
+                            radius: 2
+                        }
+                    }
+                }
+            }
+            GroupItem {
+                id: groupItem
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
     }
