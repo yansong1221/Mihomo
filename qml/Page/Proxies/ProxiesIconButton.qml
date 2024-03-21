@@ -2,7 +2,7 @@ import FluentUI
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../../Common"
+import "qrc:/Clash/Meta/qml/Common"
 
 IconButton {
 

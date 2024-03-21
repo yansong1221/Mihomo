@@ -10,8 +10,10 @@ Item {
     signal delayDetectClicked
 
     Row {
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        //anchors.left: parent.left
+        //anchors.verticalCenter: parent.verticalCenter
+        //LayoutMirroring.enabled: true
+        anchors.centerIn: parent
 
         ProxiesIconButton {
             darkIcon: "qrc:/assets/icons/dark/location.svg"

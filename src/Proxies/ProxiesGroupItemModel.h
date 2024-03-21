@@ -25,7 +25,7 @@ public:
 
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
     Q_PROPERTY(QString currentName READ currentName NOTIFY currentNameChanged)
-    Q_PROPERTY(QString groupName READ groupName)
+    Q_PROPERTY(QString groupName READ groupName NOTIFY groupNameChanged)
 public:
     QModelIndex index(int row,
                       int column = 0,
@@ -58,6 +58,7 @@ private:
 signals:
     void currentIndexChanged(int index);
     void currentNameChanged(const QString &name);
+    void groupNameChanged(const QString &name);
 
 private:
     struct ProxyInfo

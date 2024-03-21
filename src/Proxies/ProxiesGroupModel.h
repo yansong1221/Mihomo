@@ -12,6 +12,7 @@ class GroupModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+
     explicit GroupModel(QObject *parent = nullptr);
     ~GroupModel();
 

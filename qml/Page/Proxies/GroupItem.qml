@@ -1,6 +1,7 @@
 import FluentUI
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 
 FluArea {
     id: root
@@ -26,6 +27,8 @@ FluArea {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+            ScrollBar.vertical: FluScrollBar {
+            }
 
             //height: view.contentHeight
             delegate: ProxyItem {

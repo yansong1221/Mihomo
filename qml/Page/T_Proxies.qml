@@ -5,8 +5,10 @@ import FluentUI
 import "./Proxies"
 import Clash.Meta
 
-Item {
+FluPage {
     id: root1
+
+    clip: true
 
     //title: qsTr("Proxies")
 
@@ -117,69 +119,21 @@ Item {
                 }
             }
         }
-        RowLayout {
-
-            Layout.fillHeight: true
+        SwipeView {
+            id: view
+            interactive: false
+            currentIndex: modeListView.currentIndex
             Layout.fillWidth: true
-
-            ListView {
-                id: nav_list
-                //width: parent.width
-                //height: contentHeight
-                boundsBehavior: ListView.StopAtBounds
-                Layout.fillHeight: true
-                implicitWidth: 200
-                clip: true
-                // delegate: GroupItem {
-                //     dataModel: display
-                //     width: parent.width
-                //     ListView.onReused: {
-                //         expand = display.expand;
-                //     }
-                // }
-                ScrollBar.vertical: FluScrollBar {
-                }
-                model: proxiesModelFilter
-                reuseItems: true
-                delegate: FluText {
-                    width: parent.width
-                    text: display.groupName
-                    ListView.onReused:
-                    //expand = display.expand;
-                    {
-                    }
-                    MouseArea {
-
-                        anchors.fill: parent
-                        onClicked: {
-                            nav_list.currentIndex = index;
-                            groupItem.dataModel = display;
-                        }
-                    }
-                }
-                highlight: Item {
-                    z: nav_list.z + 2
-                    Rectangle {
-                        anchors.fill: parent
-
-                        //anchors.topMargin: tabListView.itemSapcing
-
-                        color: FluTheme.itemPressColor
-                        radius: 1.5
-                        Rectangle {
-                            width: 3
-                            anchors.left: parent.left
-                            height: parent.height
-                            color: "#0066b4"
-                            radius: 2
-                        }
-                    }
-                }
-            }
+            Layout.fillHeight: true
             GroupItem {
-                id: groupItem
+                id: globalGroupItem
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+            }
+            RuleModePage {
+                dataModel: proxiesModelFilter
+            }
+            DirectModePage {
             }
         }
     }
