@@ -12,7 +12,6 @@ class GroupModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-
     explicit GroupModel(QObject *parent = nullptr);
     ~GroupModel();
 
@@ -22,10 +21,13 @@ public:
                       const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    //QHash<int, QByteArray> roleNames() const override;
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    void clear();
 
-public:
+public slots:
     void reload();
+signals:
+    void reloadSuccessed();
 
 private:
     void parse(const QJsonObject &obj);
@@ -49,17 +51,14 @@ public:
     QString filerMode() const { return filerMode_; }
     void setFilerMode(const QString &mode);
 
+    //Q_INVOKABLE void setSourceModel(QAbstractItemModel *sourceModel) override;
 signals:
     void filerModeChanged(const QString &mode);
-
-public slots:
-    void reload() { model_->reload(); }
 
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 
 private:
     QString filerMode_;
-    GroupModel *model_;
 };
 } // namespace Clash::Meta::Proxies

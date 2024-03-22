@@ -62,7 +62,7 @@ FluArea {
             }
             cellWidth: 300 // 设置每个元素的宽度
             cellHeight: 70 // 设置每个元素的高度
-            currentIndex: dataModel.currentIndex
+            currentIndex: dataModel ? dataModel.currentIndex : -1
             //implicitHeight: contentHeight
             //interactive: false
         }

@@ -8,13 +8,6 @@ Item {
 
     property alias dataModel: nav_list.model
 
-    Connections {
-        id: modelEvent
-        target: nav_list.model
-        onModelReset: nav_list.resetCurrentIndex()
-        onRowsInserted: nav_list.resetCurrentIndex()
-    }
-
     RowLayout {
         anchors.fill: parent
         LayoutMirroring.enabled: true
@@ -25,13 +18,15 @@ Item {
             Layout.fillHeight: true
             implicitWidth: 200
             clip: true
-            //currentIndex: model && model.rowCount() > 0 ? 0 : -1
- 
+            highlightMoveDuration: 200
+
+            //currentIndex: model ? 0 : -1
+
             ScrollBar.vertical: FluScrollBar {
             }
 
             delegate: Item {
-                width: parent.width
+                width: nav_list.width
                 height: 40
                 MouseArea {
                     anchors.fill: parent
@@ -77,11 +72,6 @@ Item {
                     var index = model.index(currentIndex, 0);
                     var item = model.data(index);
                     groupItem.dataModel = item;
-                }
-            }
-            function resetCurrentIndex() {
-                if (nav_list.currentIndex === -1) {
-                    nav_list.currentIndex = 0; // 当模型中有新数据时，自动选择第一个条目
                 }
             }
         }

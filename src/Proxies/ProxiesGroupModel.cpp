@@ -57,7 +57,10 @@ void GroupModel::parse(const QJsonObject &obj)
             }
             groupItem->setCurrentProxyName(now);
 
+            auto row = items_.length();
+            this->beginInsertRows(QModelIndex(), row, row);
             items_ << groupItem;
+            this->endInsertRows();
         }
     }
 }
@@ -88,13 +91,10 @@ QCoro::Task<> GroupModel::__reload()
         QTimer::singleShot(1000, this, &GroupModel::reload);
         co_return;
     }
-    this->beginResetModel();
-    for (const auto &item : items_)
-        item->deleteLater();
-    items_.clear();
-
+    this->clear();
     parse(obj);
-    this->endResetModel();
+
+    Q_EMIT reloadSuccessed();
 }
 
 QModelIndex GroupModel::index(int row,
@@ -107,12 +107,27 @@ QModelIndex GroupModel::index(int row,
     return createIndex(row, column, items_[row]);
 }
 
+bool GroupModel::removeRows(int row, int count, const QModelIndex &parent /*= QModelIndex()*/)
+{
+    if (count < 1)
+        return false;
+
+    beginRemoveRows(parent, row, row + count - 1);
+    for (const auto &item : items_)
+        item->deleteLater();
+    items_.remove(row, count);
+    endRemoveRows();
+    return true;
+}
+
+void GroupModel::clear()
+{
+    removeRows(0, rowCount());
+}
+
 GroupModelFilter::GroupModelFilter(QObject *parent /*= nullptr*/)
     : QSortFilterProxyModel(parent)
-{
-    model_ = new GroupModel(this);
-    setSourceModel(model_);
-}
+{}
 
 void GroupModelFilter::setFilerMode(const QString &mode)
 {
@@ -126,7 +141,7 @@ void GroupModelFilter::setFilerMode(const QString &mode)
 
 bool GroupModelFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    auto index = model_->index(source_row, 0, source_parent);
+    auto index = sourceModel()->index(source_row, 0, source_parent);
     auto item = static_cast<GroupItemModel *>(index.internalPointer());
 
     if (filerMode_.compare("global", Qt::CaseInsensitive) == 0) {
@@ -138,5 +153,10 @@ bool GroupModelFilter::filterAcceptsRow(int source_row, const QModelIndex &sourc
     }
     return false;
 }
+
+//void GroupModelFilter::setSourceModel(QAbstractItemModel *sourceModel)
+//{
+//    QSortFilterProxyModel::setSourceModel(sourceModel);
+//}
 
 } // namespace Clash::Meta::Proxies
